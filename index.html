@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LEGENDS OF FIRE — Esports Tournament Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Hind+Siliguri:wght@500;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Firebase SDKs & Initialization -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpivb2vQY0laOQHA_Lz8p29AgRN-Vg94M",
+      authDomain: "legends-of-fire-72e10.firebaseapp.com",
+      projectId: "legends-of-fire-72e10",
+      storageBucket: "legends-of-fire-72e10.firebasestorage.app",
+      messagingSenderId: "803986902494",
+      appId: "1:803986902494:web:34c13fc199d71e3b84214f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseAuth = auth;
+    window.firebaseDb = db;
+    window.firebaseFns = { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, doc, setDoc, getDoc, updateDoc, collection, addDoc, getDocs };
+    
+    console.log("Firebase connected successfully to Legends Of Fire platform!");
+  </script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+            display: ['Rajdhani', 'Inter', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; padding: 0; background-color: #080808; color: #F4F4F6;
+      font-family: 'Inter', 'Hind Siliguri', sans-serif; overflow-x: hidden;
+    }
+    .fire-gradient-text {
+      background: linear-gradient(135deg, #FF9900 0%, #FF4500 55%, #FF1E38 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .glow-notice {
+      background: linear-gradient(90deg, rgba(255, 85, 0, 0.16) 0%, rgba(19, 19, 24, 0.98) 50%, rgba(0, 163, 255, 0.16) 100%);
+      border: 1px solid rgba(255, 102, 0, 0.38); box-shadow: 0 0 20px rgba(255, 85, 0, 0.14);
+    }
+    .wallet-card-bg {
+      background: linear-gradient(135deg, #1E293B 0%, #0F172A 45%, #2E1065 100%);
+      position: relative; overflow: hidden;
+    }
+    .view-section { display: none; animation: fadeSlideIn 0.2s ease-out; }
+    .view-section.active { display: block; }
+    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-backdrop { background: rgba(0, 0, 0, 0.84); backdrop-filter: blur(6px); }
+  </style>
+</head>
+<body class="bg-[#080808] text-gray-100 antialiased selection:bg-orange-500 selection:text-white">
+
+  <!-- Main Mobile-First Container -->
+  <div class="app-shell max-w-md mx-auto min-h-screen bg-[#080808] relative pb-28 shadow-2xl border-x border-[#181820]">
+
+    <!-- HEADER BAR -->
+    <header class="rx-header sticky top-0 z-40 bg-[#080808]/95 backdrop-blur-md border-b border-[#1E1E26] px-4 py-3 flex items-center justify-between">
+      <button type="button" onclick="navigateTo('home')" class="flex items-center gap-2.5 text-left focus:outline-none group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 via-red-600 to-amber-500 p-[1.5px] shadow-lg shadow-orange-600/30 shrink-0">
+          <div class="w-full h-full bg-[#120402] rounded-[10px] flex items-center justify-center overflow-hidden">
+            <span class="font-display font-extrabold text-xs text-orange-400">LOF</span>
+          </div>
+        </div>
+        <div>
+          <h1 class="font-display font-extrabold text-lg tracking-wider leading-none fire-gradient-text">LEGENDS OF FIRE</h1>
+          <p class="text-[10px] text-gray-400 tracking-widest uppercase mt-0.5 font-semibold">Esports Arena</p>
+        </div>
+      </button>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="showToast('Notifications: Firebase Active', 'info')" class="relative w-9 h-9 rounded-xl bg-[#14141A] border border-[#252530] flex items-center justify-center text-sky-400">
+          <i class="fa-solid fa-bell text-sm"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500 ring-2 ring-[#14141A]"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- HOME PAGE -->
+    <main id="view-home" class="view-section active px-3.5 pt-3 space-y-4">
+      <div class="glow-notice rounded-2xl p-3.5 space-y-2.5">
+        <div class="flex items-start gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 shrink-0 mt-0.5">
+            <i class="fa-solid fa-bullhorn text-xs"></i>
+          </div>
+          <p class="text-xs font-medium text-gray-200 leading-relaxed">
+            Welcome to <span class="text-orange-400 font-bold">Legends of Fire</span>! Firebase Cloud Ready.
+          </p>
+        </div>
+      </div>
+
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-4 rounded-full bg-gradient-to-b from-orange-500 to-red-600"></span>
+            <h2 class="font-display font-extrabold text-base tracking-wide text-white uppercase">Tournament Categories</h2>
+          </div>
+          <span class="text-[11px] text-orange-400 font-semibold">8 Modes</span>
+        </div>
+
+        <div id="category-grid" class="grid grid-cols-2 gap-3">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+    </main>
+
+    <!-- TOURNAMENTS PAGE -->
+    <main id="view-tournaments" class="view-section px-3.5 pt-3 space-y-3.5">
+      <div class="bg-[#131318] border border-[#252530] rounded-2xl p-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="navigateTo('home')" class="w-9 h-9 rounded-xl bg-[#1C1C24] border border-[#2C2C38] flex items-center justify-center text-gray-200">
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+          </button>
+          <div>
+            <h2 id="category-page-title" class="font-display font-extrabold text-lg text-white tracking-wide uppercase leading-none">BR MATCH</h2>
+            <p class="text-[11px] text-gray-400 mt-1">Select a match & join slot</p>
+          </div>
+        </div>
+      </div>
+      <div id="category-matches-list" class="space-y-4"></div>
+    </main>
+
+    <!-- MY MATCHES -->
+    <main id="view-matches" class="view-section px-3.5 pt-3 space-y-3.5">
+      <h2 class="font-display font-extrabold text-xl text-white tracking-wide uppercase">My Matches</h2>
+      <div id="my-matches-list" class="space-y-3">
+        <div class="rx-card bg-[#131318] border border-[#252530] rounded-2xl p-6 text-center text-xs text-gray-400">No matches joined yet.</div>
+      </div>
+    </main>
+
+    <!-- PLAYERS HUB -->
+    <main id="view-players" class="view-section px-3.5 pt-3 space-y-3.5">
+      <h2 class="font-display font-extrabold text-xl text-white tracking-wide uppercase">Players Hub</h2>
+      <div id="players-list" class="space-y-3">
+        <div class="rx-card bg-[#131318] border border-[#252530] rounded-2xl p-6 text-center text-xs text-gray-400">Loading players from Firebase...</div>
+      </div>
+    </main>
+
+    <!-- SHOP -->
+    <main id="view-shop" class="view-section px-3.5 pt-3 space-y-3.5">
+      <h2 class="font-display font-extrabold text-xl text-white tracking-wide uppercase">Esports Shop</h2>
+      <div id="shop-items-grid" class="grid grid-cols-2 gap-2.5"></div>
+    </main>
+
+    <!-- PROFILE -->
+    <main id="view-profile" class="view-section px-3.5 pt-3 space-y-3.5">
+      <div class="wallet-card-bg border border-indigo-500/30 rounded-3xl p-5 space-y-4 shadow-xl">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">FIREBASE WALLET</p>
+        <h3 id="wallet-total-display" class="text-3xl font-extrabold text-white leading-tight">৳0</h3>
+      </div>
+      <button type="button" onclick="showToast('Logged out successfully', 'info')" class="w-full bg-[#131318] border border-[#24242E] rounded-2xl p-3.5 text-rose-400 font-bold">Logout</button>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-2.5 left-1/2 -translate-x-1/2 w-[94%] max-w-[420px] z-40 bg-[#121217]/95 backdrop-blur-xl border border-[#252530] rounded-2xl px-1.5 py-2 shadow-2xl">
+      <div class="grid grid-cols-5 items-center text-center">
+        <button type="button" onclick="navigateTo('home')" class="nav-btn flex flex-col items-center gap-1 py-1 rounded-xl text-sky-400">
+          <i class="fa-solid fa-house text-base"></i><span class="text-[9px] font-extrabold">HOME</span>
+        </button>
+        <button type="button" onclick="navigateTo('matches')" class="nav-btn flex flex-col items-center gap-1 py-1 rounded-xl text-gray-400">
+          <i class="fa-regular fa-calendar-check text-base"></i><span class="text-[9px]">MATCHES</span>
+        </button>
+        <button type="button" onclick="navigateTo('players')" class="nav-btn flex flex-col items-center gap-1 py-1 rounded-xl text-gray-400">
+          <i class="fa-solid fa-users text-base"></i><span class="text-[9px]">PLAYERS</span>
+        </button>
+        <button type="button" onclick="navigateTo('shop')" class="nav-btn flex flex-col items-center gap-1 py-1 rounded-xl text-gray-400">
+          <i class="fa-solid fa-bag-shopping text-base"></i><span class="text-[9px]">SHOP</span>
+        </button>
+        <button type="button" onclick="navigateTo('profile')" class="nav-btn flex flex-col items-center gap-1 py-1 rounded-xl text-gray-400">
+          <i class="fa-regular fa-user text-base"></i><span class="text-[9px]">PROFILE</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div id="toast-container" class="fixed top-16 left-1/2 -translate-x-1/2 z-[60] w-[90%] max-w-sm pointer-events-none flex flex-col items-center gap-2"></div>
+
+  <script>
+    const state = {
+      categories: [
+        { id: 'BR MATCH', title: 'BR MATCH', gradient: 'from-orange-600 via-red-600 to-amber-500', icon: 'fa-fire' },
+        { id: 'E-SPORTS MODE', title: 'E-SPORTS MODE', gradient: 'from-sky-500 via-blue-600 to-indigo-700', icon: 'fa-trophy' },
+        { id: 'LONE WOLF', title: 'LONE WOLF', gradient: 'from-purple-600 via-violet-700 to-indigo-800', icon: 'fa-crosshairs' },
+        { id: 'LOST TO WIN', title: 'LOST TO WIN', gradient: 'from-rose-500 via-pink-600 to-purple-700', icon: 'fa-skull-crossbones' },
+        { id: 'SOLO TOURNAMENT', title: 'SOLO TOURNAMENT', gradient: 'from-amber-500 via-orange-600 to-red-700', icon: 'fa-user-ninja' },
+        { id: 'DUO TOURNAMENT', title: 'DUO TOURNAMENT', gradient: 'from-emerald-500 via-teal-600 to-cyan-700', icon: 'fa-user-group' },
+        { id: 'SQUAD TOURNAMENT', title: 'SQUAD TOURNAMENT', gradient: 'from-cyan-500 via-blue-600 to-indigo-700', icon: 'fa-users' },
+        { id: 'CUSTOM ROOM', title: 'CUSTOM ROOM', gradient: 'from-red-600 via-rose-600 to-orange-600', icon: 'fa-gamepad' }
+      ],
+      shop: [
+        { name: 'Tournament Pass', desc: 'Free entry to 5 weekly matches', price: 150, tag: 'PASS' },
+        { name: 'VIP Membership', desc: 'Priority slot + referral bonus', price: 299, tag: 'VIP' },
+        { name: '25 Diamonds', desc: 'Instant UID Top-Up', price: 25, tag: 'UID' },
+        { name: '115 Diamonds', desc: 'Instant UID Top-Up', price: 85, tag: 'POPULAR' }
+      ]
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategories();
+      renderShop();
+    });
+
+    function navigateTo(viewName) {
+      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.add('active');
+    }
+
+    function openCategory(catId) {
+      document.getElementById('category-page-title').textContent = catId;
+      navigateTo('tournaments');
+      document.getElementById('category-matches-list').innerHTML = `
+        <div class="rx-card bg-[#131318] border border-[#252530] rounded-2xl p-6 text-center text-xs text-gray-300">
+          No live matches in ${catId} right now. Check back soon!
+        </div>
+      `;
+    }
+
+    function renderCategories() {
+      const grid = document.getElementById('category-grid');
+      grid.innerHTML = state.categories.map(cat => `
+        <button type="button" onclick="openCategory('${cat.id}')" class="rounded-2xl overflow-hidden border border-[#262632] bg-[#131318] text-left shadow-lg active:scale-95 transition">
+          <div class="h-24 w-full bg-gradient-to-br ${cat.gradient} p-3 flex flex-col justify-between">
+            <span class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center text-white text-xs">
+              <i class="fa-solid ${cat.icon}"></i>
+            </span>
+            <h3 class="font-display font-extrabold text-sm text-white">${cat.title}</h3>
+          </div>
+        </button>
+      `).join('');
+    }
+
+    function renderShop() {
+      const grid = document.getElementById('shop-items-grid');
+      grid.innerHTML = state.shop.map(item => `
+        <div class="rx-card bg-[#131318] border border-[#252530] rounded-2xl p-3 flex flex-col justify-between space-y-2 shadow">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-orange-500/15 text-orange-400 text-[9px] font-extrabold">${item.tag}</span>
+            <h4 class="font-bold text-sm text-white mt-1.5">${item.name}</h4>
+            <p class="text-[11px] text-gray-400">${item.desc}</p>
+          </div>
+          <div class="flex items-center justify-between pt-1 border-t border-white/5">
+            <span class="font-extrabold text-sm text-emerald-400">৳${item.price}</span>
+            <button type="button" onclick="showToast('Item selected: ${item.name}', 'success')" class="px-3 py-1.5 rounded-xl bg-sky-500 text-white text-[11px] font-extrabold">Buy</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showToast(msg, type='info') {
+      const container = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'px-4 py-2.5 rounded-2xl border shadow-xl text-xs font-bold bg-[#1A1A24]/95 border-sky-500/50 text-white';
+      t.textContent = msg;
+      container.appendChild(t);
+      setTimeout(() => t.remove(), 2500);
+    }
+  </script>
+</body>
+</html>
