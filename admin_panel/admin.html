@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LEGENDS OF FIRE — Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    body { background-color: #080808; color: #F4F4F6; font-family: 'Inter', sans-serif; }
+    .fire-gradient { background: linear-gradient(135deg, #FF9900 0%, #FF4500 55%, #FF1E38 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="bg-[#080808] text-gray-100 antialiased p-4">
+  <div class="max-w-md mx-auto space-y-5 pb-10">
+    <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+      <div>
+        <h1 class="font-extrabold text-xl fire-gradient">LOF ADMIN PANEL</h1>
+        <p class="text-[10px] text-gray-400 uppercase tracking-widest">Tournament Management</p>
+      </div>
+      <a href="index.html" class="px-3 py-1.5 rounded-xl bg-gray-800 text-xs font-bold text-gray-300 hover:text-white">Back to App</a>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-[#131318] border border-gray-800 rounded-2xl p-3.5">
+        <p class="text-[10px] text-gray-400 font-bold uppercase">Total Tournaments</p>
+        <h3 id="admin-total-matches" class="text-2xl font-extrabold text-orange-400 mt-1">12</h3>
+      </div>
+      <div class="bg-[#131318] border border-gray-800 rounded-2xl p-3.5">
+        <p class="text-[10px] text-gray-400 font-bold uppercase">Pending Withdraws</p>
+        <h3 id="admin-pending-withdraws" class="text-2xl font-extrabold text-sky-400 mt-1">৳0</h3>
+      </div>
+    </div>
+
+    <div class="bg-[#131318] border border-gray-800 rounded-3xl p-4 space-y-3">
+      <h3 class="font-bold text-sm text-white flex items-center gap-2">
+        <i class="fa-solid fa-plus-circle text-orange-500"></i> Create New Match
+      </h3>
+      <div class="space-y-2.5">
+        <input id="adm-match-title" type="text" placeholder="Match Title (e.g. BR SOLO | MATCH)" class="w-full bg-[#1A1A22] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
+        <div class="grid grid-cols-2 gap-2">
+          <input id="adm-match-prize" type="number" placeholder="Prize Pool (৳)" class="w-full bg-[#1A1A22] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
+          <input id="adm-match-fee" type="number" placeholder="Entry Fee (৳)" class="w-full bg-[#1A1A22] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <input id="adm-match-time" type="text" placeholder="Time (e.g. 10:00 PM)" class="w-full bg-[#1A1A22] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
+          <input id="adm-match-roomid" type="text" placeholder="Room ID" class="w-full bg-[#1A1A22] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
+        </div>
+        <button type="button" onclick="adminCreateMatch()" class="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 text-white font-extrabold text-xs uppercase shadow-lg">
+          Publish Match Live
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-[#131318] border border-gray-800 rounded-3xl p-4 space-y-3">
+      <h3 class="font-bold text-sm text-white flex items-center gap-2">
+        <i class="fa-solid fa-wallet text-emerald-500"></i> Withdraw Requests
+      </h3>
+      <div id="admin-withdraw-list" class="space-y-2">
+        <div class="p-3 bg-[#1A1A22] rounded-xl text-center text-xs text-gray-400">No pending withdraw requests.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function adminCreateMatch() {
+      const title = document.getElementById('adm-match-title').value;
+      const prize = document.getElementById('adm-match-prize').value;
+      if (!title || !prize) {
+        alert('Please fill match title and prize pool!');
+        return;
+      }
+      alert('Match successfully created and published to app!');
+      document.getElementById('adm-match-title').value = '';
+      document.getElementById('adm-match-prize').value = '';
+    }
+  </script>
+</body>
+</html>
