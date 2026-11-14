@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LEGENDS OF FIRE — Separate Admin Command Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #080808;
+      --bg-card: #151515;
+      --fire-orange: #FF6A00;
+      --ember-red: #FF3B00;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1A0B05 0%, #050505 70%);
+      color: #F8FAFC;
+      font-family: 'Rajdhani', 'Hind Siliguri', sans-serif;
+      min-height: 100vh;
+    }
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-bangla { font-family: 'Hind Siliguri', 'Rajdhani', sans-serif; }
+    .fire-gradient-text {
+      background: linear-gradient(90deg, #FF6A00 0%, #FBBF24 50%, #FF3B00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .fire-btn {
+      background: linear-gradient(135deg, #FF6A00 0%, #FF3B00 100%);
+      box-shadow: 0 4px 18px rgba(255, 106, 0, 0.35);
+      transition: transform 0.15s ease;
+    }
+    .fire-btn:active { transform: scale(0.97); }
+    .card-surface {
+      background: #151515;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #FF6A00 0%, #FF3B00 100%);
+      color: #FFFFFF;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="pb-16">
+  <!-- ADMIN LOGIN GATE -->
+  <div id="adminLoginGate" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md card-surface rounded-2xl p-6 border border-orange-500/30 shadow-2xl space-y-5">
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#FF6A00] to-[#FF3B00] flex items-center justify-center shadow-xl shadow-orange-500/30 mb-3">
+          <svg class="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+          </svg>
+        </div>
+        <h1 class="font-orbitron font-black text-xl fire-gradient-text tracking-wider">LEGENDS OF FIRE</h1>
+        <p class="text-xs text-slate-400 uppercase tracking-widest mt-1">Separate Admin Control Panel</p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Admin Email</label>
+          <input id="admEmail" type="email" required value="admin@legendsoffire.gg" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Admin Security PIN / Password</label>
+          <input id="admPass" type="password" required value="admin123" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl fire-btn font-orbitron font-bold text-xs text-white tracking-wider uppercase">
+          UNLOCK ADMIN PANEL
+        </button>
+      </form>
+      <p class="text-[11px] text-center text-slate-500">Default Demo Login: <span class="text-orange-400">admin@legendsoffire.gg</span> / <span class="text-orange-400">admin123</span></p>
+    </div>
+  </div>
+
+  <!-- MAIN SEPARATE ADMIN DASHBOARD -->
+  <div id="adminDashboardShell" class="hidden max-w-4xl mx-auto">
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-40 h-16 px-4 bg-[#0B0B0D]/95 backdrop-blur-md border-b border-orange-500/25 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF6A00] to-[#FF3B00] flex items-center justify-center shadow-lg shadow-orange-500/30">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M13.5 2C13.5 2 14.5 5.5 12 8C10.5 9.5 8.5 9 8.5 9C8.5 9 9.5 11.5 7.5 13.5C6.2 14.8 5 14.5 5 14.5C5 18.6 8.1 22 12 22C16.4 22 20 18.4 20 14C20 8.5 13.5 2 13.5 2Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-orbitron font-black text-sm fire-gradient-text tracking-wider">LEGENDS OF FIRE</div>
+          <div class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Standalone Admin Panel</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="index.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-[#18181D] border border-orange-500/35 text-xs font-bold text-orange-400 hover:bg-orange-500/15">
+          ↗ Open User App
+        </a>
+        <button onclick="adminLogout()" class="px-3 py-1.5 rounded-xl bg-rose-500/15 border border-rose-500/35 text-xs font-bold text-rose-400">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <main class="p-4 space-y-5">
+      <!-- KPI OVERVIEW CARDS -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="card-surface rounded-2xl p-3.5 border border-orange-500/20">
+          <div class="text-[11px] text-slate-400 uppercase font-bold">Total Tournaments</div>
+          <div id="kpiMatches" class="font-orbitron font-black text-2xl text-orange-400 mt-1">4</div>
+        </div>
+        <div class="card-surface rounded-2xl p-3.5 border border-amber-500/20">
+          <div class="text-[11px] text-slate-400 uppercase font-bold">Pending Payments</div>
+          <div id="kpiPending" class="font-orbitron font-black text-2xl text-amber-400 mt-1">2</div>
+        </div>
+        <div class="card-surface rounded-2xl p-3.5 border border-emerald-500/20">
+          <div class="text-[11px] text-slate-400 uppercase font-bold">Total Revenue</div>
+          <div id="kpiRevenue" class="font-orbitron font-black text-2xl text-emerald-400 mt-1">৳14,850</div>
+        </div>
+        <div class="card-surface rounded-2xl p-3.5 border border-sky-500/20">
+          <div class="text-[11px] text-slate-400 uppercase font-bold">Active Players</div>
+          <div id="kpiPlayers" class="font-orbitron font-black text-2xl text-sky-400 mt-1">1,248</div>
+        </div>
+      </div>
+
+      <!-- NAVIGATION TABS -->
+      <div class="flex gap-2 overflow-x-auto pb-1">
+        <button onclick="switchAdminTab('tournaments')" data-atab="tournaments" class="tab-btn active px-4 py-2 rounded-xl card-surface text-xs font-orbitron font-bold shrink-0">🎮 Matches & Room ID</button>
+        <button onclick="switchAdminTab('payments')" data-atab="payments" class="tab-btn px-4 py-2 rounded-xl card-surface text-xs font-orbitron font-bold text-slate-300 shrink-0">💳 Deposits & Withdraw</button>
+        <button onclick="switchAdminTab('banners')" data-atab="banners" class="tab-btn px-4 py-2 rounded-xl card-surface text-xs font-orbitron font-bold text-slate-300 shrink-0">🖼️ Banners & Categories</button>
+        <button onclick="switchAdminTab('shop')" data-atab="shop" class="tab-btn px-4 py-2 rounded-xl card-surface text-xs font-orbitron font-bold text-slate-300 shrink-0">💎 Shop & Diamonds</button>
+        <button onclick="switchAdminTab('players')" data-atab="players" class="tab-btn px-4 py-2 rounded-xl card-surface text-xs font-orbitron font-bold text-slate-300 shrink-0">👥 Players & Results</button>
+      </div>
+
+      <!-- TAB CONTENT -->
+      <div id="adminTabContent" class="space-y-4"></div>
+    </main>
+  </div>
+
+  <!-- TOAST -->
+  <div id="adminToast" class="fixed top-5 right-5 z-50 px-4 py-3 rounded-xl bg-[#1C1C22] border border-orange-500/50 text-xs font-bold text-white shadow-2xl hidden"></div>
+
+  <script>
+    const adminData = {
+      currentTab: 'tournaments',
+      tournaments: [
+        { id: 't1', category: 'BR Match', title: 'BR SOLO | MATCH #104', date: '2026-11-14 09:30 PM', prizePool: 300, perKill: 7, entryFee: 10, slots: '24/32', status: 'UPCOMING', roomId: '88492014', roomPass: 'LOF99' },
+        { id: 't2', category: 'Duo Tournament', title: 'BR DUO | NIGHT CLASH', date: '2026-11-14 10:00 PM', prizePool: 400, perKill: 5, entryFee: 10, slots: '31/48', status: 'UPCOMING', roomId: '77102934', roomPass: 'DUO77' },
+        { id: 't3', category: 'Squad Tournament', title: 'SQUAD CHAMPIONSHIP', date: '2026-11-14 10:45 PM', prizePool: 1200, perKill: 15, entryFee: 40, slots: '10/12', status: 'LIVE', roomId: '99201844', roomPass: 'FIRE26' }
+      ],
+      transactions: [
+        { id: 'TX-501', user: 'MD Robiul Islam', type: 'Deposit', method: 'Nagad', ref: '9A8B7C6D', amount: 200, status: 'Pending' },
+        { id: 'TX-502', user: 'LGFㅤRAFI', type: 'Withdraw', method: 'bKash', ref: '01711002233', amount: 350, status: 'Pending' },
+        { id: 'TX-500', user: 'NOVAㅤSAJID', type: 'Deposit', method: 'Upay', ref: '4P2L9X1M', amount: 150, status: 'Approved' }
+      ],
+      banners: [
+        { id: 'b1', label: 'কিভাবে LEGENDS OF FIRE তে টুর্নামেন্ট খেলবেন A টু Z', ytUrl: 'https://www.youtube.com/@LegendsofFireEsports', thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg' }
+      ],
+      categories: [
+        { id: 'br', title: 'BR Match', subtitle: 'Full Map Survival', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80' },
+        { id: 'esports', title: 'E-Sports Mode', subtitle: 'Pro League Rules', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80' },
+        { id: 'lonewolf', title: 'Lone Wolf', subtitle: '1v1 / 2v2 Fast', image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80' },
+        { id: 'squad', title: 'Squad Tournament', subtitle: '4v4 Clash & BR', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80' }
+      ],
+      diamonds: [
+        { id: 'd1', name: '25 Diamonds (+3 Bonus)', price: 25 },
+        { id: 'd2', name: '115 Diamonds (+12 Bonus)', price: 85 },
+        { id: 'd3', name: 'Weekly Membership (450 💎)', price: 165 }
+      ],
+      players: [
+        { id: 'p1', name: 'MD Robiul Islam', uid: '2489104721', role: 'Rusher', wallet: 120, banned: false },
+        { id: 'p2', name: 'LGFㅤRAFI', uid: '1928374650', role: 'Rusher', wallet: 480, banned: false },
+        { id: 'p3', name: 'NOVAㅤSAJID', uid: '5647382910', role: 'Sniper', wallet: 310, banned: false }
+      ],
+      paymentAccounts: {
+        bkash: '01700000000',
+        nagad: '01827720224',
+        rocket: '01900000000',
+        upay: '01600000000'
+      }
+    };
+
+    function toast(msg) {
+      const el = document.getElementById('adminToast');
+      el.textContent = '🔥 ' + msg;
+      el.classList.remove('hidden');
+      clearTimeout(window._t);
+      window._t = setTimeout(() => el.classList.add('hidden'), 2800);
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      document.getElementById('adminLoginGate').classList.add('hidden');
+      document.getElementById('adminDashboardShell').classList.remove('hidden');
+      toast('Admin Command Center Unlocked!');
+      renderTab();
+    }
+
+    function adminLogout() {
+      document.getElementById('adminDashboardShell').classList.add('hidden');
+      document.getElementById('adminLoginGate').classList.remove('hidden');
+    }
+
+    function switchAdminTab(tab) {
+      adminData.currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.atab === tab);
+      });
+      renderTab();
+    }
+
+    function renderTab() {
+      const container = document.getElementById('adminTabContent');
+      document.getElementById('kpiMatches').textContent = adminData.tournaments.length;
+      document.getElementById('kpiPending').textContent = adminData.transactions.filter(t => t.status === 'Pending').length;
+
+      if (adminData.currentTab === 'tournaments') {
+        container.innerHTML = `
+          <!-- CREATE NEW TOURNAMENT -->
+          <div class="card-surface rounded-2xl p-4 border border-orange-500/25 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-orange-400 uppercase">+ Create New Match / Tournament</h2>
+            <form onsubmit="createMatch(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+              <input id="newTitle" required placeholder="Match Title (e.g. BR SQUAD #105)" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <select id="newCat" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white">
+                <option>BR Match</option>
+                <option>E-Sports Mode</option>
+                <option>Lone Wolf</option>
+                <option>Solo Tournament</option>
+                <option>Duo Tournament</option>
+                <option>Squad Tournament</option>
+              </select>
+              <input id="newDate" required value="2026-11-15 09:00 PM" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <input id="newPrize" type="number" required placeholder="Prize Pool (৳)" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <input id="newKill" type="number" required placeholder="Per Kill (৳)" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <input id="newFee" type="number" required placeholder="Entry Fee (৳)" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <button type="submit" class="sm:col-span-3 py-2.5 rounded-xl fire-btn font-orbitron font-bold text-white uppercase">Publish Tournament</button>
+            </form>
+          </div>
+
+          <!-- MANAGE ROOM ID, PASSWORD & STATUS -->
+          <div class="space-y-3">
+            ${adminData.tournaments.map(m => `
+              <div class="card-surface rounded-2xl p-4 border border-white/10 space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <span class="px-2 py-0.5 rounded bg-orange-500/15 text-orange-400 text-[10px] font-bold">${m.category}</span>
+                    <h3 class="font-bold text-base text-white mt-1">${m.title}</h3>
+                    <p class="text-xs text-slate-400">${m.date} • Prize: ৳${m.prizePool} • Kill: ৳${m.perKill} • Entry: ৳${m.entryFee}</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <select onchange="updateMatchStatus('${m.id}', this.value)" class="px-2.5 py-1.5 rounded-lg bg-[#0D0D10] border border-white/15 text-xs font-bold text-amber-400">
+                      <option ${m.status==='UPCOMING'?'selected':''}>UPCOMING</option>
+                      <option ${m.status==='LIVE'?'selected':''}>LIVE</option>
+                      <option ${m.status==='COMPLETED'?'selected':''}>COMPLETED</option>
+                    </select>
+                    <button onclick="deleteMatch('${m.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-600/20 text-rose-400 text-xs font-bold">Delete</button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <input id="rid_${m.id}" value="${m.roomId}" placeholder="Room ID" class="px-3 py-2 rounded-xl bg-[#0D0D10] border border-white/10 text-xs text-white" />
+                  <input id="rpass_${m.id}" value="${m.roomPass}" placeholder="Room Password" class="px-3 py-2 rounded-xl bg-[#0D0D10] border border-white/10 text-xs text-white" />
+                  <button onclick="saveRoomCreds('${m.id}')" class="py-2 rounded-xl fire-btn font-orbitron font-bold text-xs text-white">Update Room ID & Notify</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (adminData.currentTab === 'payments') {
+        container.innerHTML = `
+          <!-- PAYMENT ACCOUNT NUMBERS -->
+          <div class="card-surface rounded-2xl p-4 border border-orange-500/25 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-orange-400 uppercase">Payment Gateway Numbers (bKash / Nagad / Rocket / Upay)</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+              ${Object.entries(adminData.paymentAccounts).map(([k, val]) => `
+                <div>
+                  <label class="block text-slate-400 uppercase text-[10px] mb-1">${k}</label>
+                  <input id="pay_${k}" value="${val}" class="w-full px-3 py-2 rounded-xl bg-[#0D0D10] border border-white/10 text-white font-bold" />
+                </div>
+              `).join('')}
+            </div>
+            <button onclick="savePaymentNumbers()" class="px-4 py-2 rounded-xl fire-btn font-orbitron text-xs font-bold text-white">Save Numbers</button>
+          </div>
+
+          <!-- VERIFICATION QUEUE -->
+          <div class="card-surface rounded-2xl p-4 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-white uppercase">Deposit & Withdrawal Verification</h2>
+            ${adminData.transactions.map(tx => `
+              <div class="p-3 rounded-xl bg-[#0E0E12] border border-white/10 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div class="text-sm font-bold text-white">${tx.user} — <span class="text-orange-400">${tx.type} (${tx.method})</span></div>
+                  <div class="text-xs text-slate-400">Amount: <span class="text-emerald-400 font-bold">৳${tx.amount}</span> • TrxID/No: <span class="text-amber-300 font-mono">${tx.ref}</span></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  ${tx.status === 'Pending' ? `
+                    <button onclick="verifyTx('${tx.id}', 'Approved')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold">Approve</button>
+                    <button onclick="verifyTx('${tx.id}', 'Rejected')" class="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-bold">Reject</button>
+                  ` : `<span class="px-2.5 py-1 rounded-lg bg-white/5 text-xs font-bold ${tx.status==='Approved'?'text-emerald-400':'text-rose-400'}">${tx.status}</span>`}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (adminData.currentTab === 'banners') {
+        container.innerHTML = `
+          <!-- ADD YOUTUBE BANNER -->
+          <div class="card-surface rounded-2xl p-4 border border-orange-500/25 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-orange-400 uppercase">Add YouTube Thumbnail Banner</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              <input id="ytUrl" placeholder="YouTube Video Link (https://youtube.com/...)" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <input id="ytCaption" placeholder="Banner Title / Caption" class="px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+            </div>
+            <button onclick="addYtBanner()" class="px-4 py-2 rounded-xl fire-btn font-orbitron text-xs font-bold text-white">Add Banner</button>
+          </div>
+
+          <!-- CATEGORY CARD IMAGE CUSTOMIZER -->
+          <div class="card-surface rounded-2xl p-4 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-white uppercase">Customize Category Poster Images</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              ${adminData.categories.map(c => `
+                <div class="p-3 rounded-xl bg-[#0E0E12] border border-white/10 space-y-2">
+                  <img src="${c.image}" class="w-full h-28 object-cover rounded-lg" />
+                  <div class="font-bold text-sm text-white">${c.title}</div>
+                  <input id="catImg_${c.id}" value="${c.image}" class="w-full px-2.5 py-1.5 rounded-lg bg-black/50 border border-white/10 text-xs text-slate-300" />
+                  <button onclick="updateCategoryImg('${c.id}')" class="w-full py-1.5 rounded-lg fire-btn text-xs font-bold text-white">Update Poster Image</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (adminData.currentTab === 'shop') {
+        container.innerHTML = `
+          <div class="card-surface rounded-2xl p-4 border border-orange-500/25 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-orange-400 uppercase">+ Add Diamond Package / Shop Product</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+              <input id="pkgName" placeholder="Package Name (e.g. 520 Diamonds)" class="px-3 py-2 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <input id="pkgPrice" type="number" placeholder="Price (৳)" class="px-3 py-2 rounded-xl bg-[#0D0D10] border border-white/10 text-white" />
+              <button onclick="addDiamondPkg()" class="py-2 rounded-xl fire-btn font-orbitron font-bold text-white">Add Item</button>
+            </div>
+            <div class="space-y-2 pt-2">
+              ${adminData.diamonds.map(d => `
+                <div class="p-3 rounded-xl bg-[#0E0E12] flex justify-between items-center text-xs">
+                  <span class="font-bold text-white">💎 ${d.name}</span>
+                  <span class="font-orbitron font-bold text-orange-400">৳${d.price}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (adminData.currentTab === 'players') {
+        container.innerHTML = `
+          <div class="card-surface rounded-2xl p-4 space-y-3">
+            <h2 class="font-orbitron font-bold text-xs text-orange-400 uppercase">Registered Players & Prize Payouts</h2>
+            ${adminData.players.map(p => `
+              <div class="p-3 rounded-xl bg-[#0E0E12] border border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div>
+                  <div class="font-bold text-sm text-white">${p.name} <span class="text-orange-400">(${p.role})</span></div>
+                  <div class="text-slate-400">UID: ${p.uid} • Wallet: <span class="text-emerald-400 font-bold">৳${p.wallet}</span></div>
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="creditPrize('${p.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold">+৳50 Prize</button>
+                  <button onclick="toggleBan('${p.id}')" class="px-3 py-1.5 rounded-lg ${p.banned ? 'bg-amber-600' : 'bg-rose-600'} text-white font-bold">${p.banned ? 'Unban' : 'Ban'}</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    function createMatch(e) {
+      e.preventDefault();
+      adminData.tournaments.unshift({
+        id: 't' + Date.now(),
+        category: document.getElementById('newCat').value,
+        title: document.getElementById('newTitle').value,
+        date: document.getElementById('newDate').value,
+        prizePool: Number(document.getElementById('newPrize').value),
+        perKill: Number(document.getElementById('newKill').value),
+        entryFee: Number(document.getElementById('newFee').value),
+        slots: '0/48',
+        status: 'UPCOMING',
+        roomId: 'TBD',
+        roomPass: 'TBD'
+      });
+      toast('New tournament published!');
+      renderTab();
+    }
+
+    function saveRoomCreds(id) {
+      const m = adminData.tournaments.find(x => x.id === id);
+      if (!m) return;
+      m.roomId = document.getElementById('rid_' + id).value;
+      m.roomPass = document.getElementById('rpass_' + id).value;
+      toast('Room ID & Password updated & sent to players!');
+    }
+
+    function updateMatchStatus(id, st) {
+      const m = adminData.tournaments.find(x => x.id === id);
+      if (m) m.status = st;
+      toast('Match status updated to ' + st);
+    }
+
+    function deleteMatch(id) {
+      adminData.tournaments = adminData.tournaments.filter(x => x.id !== id);
+      toast('Tournament deleted.');
+      renderTab();
+    }
+
+    function verifyTx(id, status) {
+      const tx = adminData.transactions.find(x => x.id === id);
+      if (tx) tx.status = status;
+      toast(`Payment ${id} marked as ${status}!`);
+      renderTab();
+    }
+
+    function savePaymentNumbers() {
+      Object.keys(adminData.paymentAccounts).forEach(k => {
+        adminData.paymentAccounts[k] = document.getElementById('pay_' + k).value;
+      });
+      toast('Payment numbers updated!');
+    }
+
+    function addYtBanner() {
+      const url = document.getElementById('ytUrl').value.trim();
+      const label = document.getElementById('ytCaption').value.trim() || 'LEGENDS OF FIRE PROMO';
+      if (!url) return toast('Enter YouTube URL');
+      adminData.banners.unshift({ id: 'b' + Date.now(), label, ytUrl: url, thumb: '' });
+      toast('YouTube banner added!');
+      document.getElementById('ytUrl').value = '';
+      document.getElementById('ytCaption').value = '';
+    }
+
+    function updateCategoryImg(id) {
+      const c = adminData.categories.find(x => x.id === id);
+      if (c) c.image = document.getElementById('catImg_' + id).value;
+      toast('Category poster updated!');
+      renderTab();
+    }
+
+    function addDiamondPkg() {
+      const name = document.getElementById('pkgName').value.trim();
+      const price = Number(document.getElementById('pkgPrice').value);
+      if (!name || !price) return toast('Enter package name and price');
+      adminData.diamonds.push({ id: 'd' + Date.now(), name, price });
+      toast('Shop package added!');
+      renderTab();
+    }
+
+    function creditPrize(pid) {
+      const p = adminData.players.find(x => x.id === pid);
+      if (p) p.wallet += 50;
+      toast('৳50 Winning Prize credited to ' + p.name);
+      renderTab();
+    }
+
+    function toggleBan(pid) {
+      const p = adminData.players.find(x => x.id === pid);
+      if (p) p.banned = !p.banned;
+      toast(p.banned ? 'Player banned.' : 'Player unbanned.');
+      renderTab();
+    }
+  </script>
+</body>
+</html>
