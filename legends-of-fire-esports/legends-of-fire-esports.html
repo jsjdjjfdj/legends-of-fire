@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LEGENDS OF FIRE — Free Fire Esports Tournament Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #080808;
+      --bg-card: #151515;
+      --bg-elevated: #1E1E22;
+      --fire-orange: #FF6A00;
+      --ember-red: #FF3B00;
+      --fire-gold: #F59E0B;
+      --text-primary: #F8FAFC;
+      --text-muted: #94A3B8;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1A0B05 0%, #050505 65%);
+      color: var(--text-primary);
+      font-family: 'Rajdhani', 'Hind Siliguri', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-bangla { font-family: 'Hind Siliguri', 'Rajdhani', sans-serif; }
+    .app-shell {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background: #080808;
+      position: relative;
+      box-shadow: 0 0 60px rgba(255, 106, 0, 0.14);
+      border-left: 1px solid rgba(255, 106, 0, 0.14);
+      border-right: 1px solid rgba(255, 106, 0, 0.14);
+      padding-bottom: 88px;
+      overflow-x: hidden;
+    }
+    .fire-gradient-text {
+      background: linear-gradient(90deg, #FF6A00 0%, #FBBF24 50%, #FF3B00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .fire-btn {
+      background: linear-gradient(135deg, #FF6A00 0%, #FF3B00 100%);
+      box-shadow: 0 4px 18px rgba(255, 106, 0, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .fire-btn:active { transform: scale(0.97); }
+    .fire-border {
+      border: 1px solid rgba(255, 106, 0, 0.25);
+    }
+    .card-surface {
+      background: #151515;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    /* Virtual Debit Card */
+    .virtual-card {
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(255, 106, 0, 0.08),
+        rgba(255, 106, 0, 0.08) 10px,
+        rgba(15, 23, 42, 0.5) 10px,
+        rgba(15, 23, 42, 0.5) 20px
+      ), linear-gradient(135deg, #2A1208 0%, #161822 55%, #1E110A 100%);
+      border: 1px solid rgba(255, 106, 0, 0.35);
+      box-shadow: 0 12px 30px rgba(255, 59, 0, 0.18);
+    }
+    /* Rainbow Glow Ring */
+    .avatar-ring {
+      background: conic-gradient(from 0deg, #FF6A00, #F59E0B, #10B981, #3B82F6, #EC4899, #FF6A00);
+      padding: 3px;
+      border-radius: 9999px;
+      box-shadow: 0 0 22px rgba(255, 106, 0, 0.45);
+    }
+    /* Marquee */
+    .marquee-wrap { overflow: hidden; white-space: nowrap; }
+    .marquee-track {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marqueeAnim 18s linear infinite;
+    }
+    @keyframes marqueeAnim {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    /* Floating Support */
+    .support-fab {
+      position: fixed;
+      right: max(12px, calc(50vw - 208px));
+      bottom: 92px;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .support-fab-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #FF6A00, #FF3B00);
+      box-shadow: 0 0 20px rgba(255, 106, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 440px;
+      background: rgba(14, 14, 17, 0.96);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid rgba(255, 106, 0, 0.22);
+      z-index: 45;
+      padding: 6px 6px 10px;
+    }
+    .nav-item.active .nav-pill {
+      background: rgba(255, 106, 0, 0.16);
+      color: #FF6A00;
+    }
+    .nav-item.active .nav-label {
+      color: #FF6A00;
+      font-weight: 700;
+    }
+    .nav-item.active .nav-dot {
+      opacity: 1;
+    }
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <!-- TOP HEADER -->
+    <header id="topHeader" class="sticky top-0 z-40 h-14 px-3.5 bg-[#0B0B0D]/95 backdrop-blur-md border-b border-orange-500/20 flex items-center justify-between">
+      <div class="flex items-center gap-2 cursor-pointer" onclick="navigate('home')">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF6A00] to-[#FF3B00] flex items-center justify-center shadow-lg shadow-orange-500/30">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M13.5 2C13.5 2 14.5 5.5 12 8C10.5 9.5 8.5 9 8.5 9C8.5 9 9.5 11.5 7.5 13.5C6.2 14.8 5 14.5 5 14.5C5 18.6 8.1 22 12 22C16.4 22 20 18.4 20 14C20 8.5 13.5 2 13.5 2ZM12 19.5C10.1 19.5 8.5 17.9 8.5 16C8.5 14.7 9.3 13.5 10.5 12.8C10.5 13.8 11.2 14.5 12 14.5C13.4 14.5 14.5 13.4 14.5 12C14.5 11.4 14.3 10.8 13.9 10.3C15.6 11.4 16.5 13.5 16.5 15.5C16.5 17.7 14.5 19.5 12 19.5Z"/>
+          </svg>
+        </div>
+        <div class="leading-none">
+          <span class="font-orbitron font-black text-sm tracking-wider fire-gradient-text">LEGENDS</span>
+          <span class="font-orbitron font-bold text-xs text-slate-200 tracking-wider ml-1">OF FIRE</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Admin Mode Pill -->
+        <button id="adminToggleBtn" onclick="toggleAdminMode()" class="px-2 py-1 rounded-full text-[10px] font-orbitron font-bold tracking-wider border border-orange-500/40 bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">
+          ADMIN
+        </button>
+
+        <!-- Notification Bell -->
+        <button onclick="openModal('modalNotifications')" class="relative w-8 h-8 rounded-full bg-[#18181C] border border-white/10 flex items-center justify-center text-orange-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span id="notifDotBadge" class="w-2 h-2 rounded-full bg-red-500 absolute top-1.5 right-1.5 animate-ping"></span>
+        </button>
+
+        <!-- Trophy Leaderboard -->
+        <button onclick="openModal('modalLeaderboard')" class="w-8 h-8 rounded-full bg-[#18181C] border border-white/10 flex items-center justify-center text-amber-400">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1a5.01 5.01 0 003.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+          </svg>
+        </button>
+
+        <!-- Wallet Pill -->
+        <button onclick="navigate('profile')" class="h-8 px-2.5 rounded-full bg-[#18181C] border border-orange-500/35 flex items-center gap-1.5 text-xs font-bold text-white">
+          <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+          <span id="headerTotalBalance">৳120</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main id="mainContainer" class="p-3.5 space-y-4">
+      <!-- Dynamic Views Rendered Here -->
+    </main>
+
+    <!-- FLOATING SUPPORT BUTTON -->
+    <div id="floatingSupport" class="support-fab">
+      <button onclick="openModal('modalSupport')" class="support-fab-btn text-white" aria-label="Customer Support">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/>
+        </svg>
+      </button>
+      <span class="mt-1 px-1.5 py-0.5 rounded bg-black/80 border border-orange-500/30 text-[9px] font-orbitron font-bold tracking-wider text-orange-300">SUPPORT</span>
+    </div>
+
+    <!-- BOTTOM 5-TAB NAVIGATION -->
+    <nav id="bottomNav" class="bottom-nav">
+      <div class="grid grid-cols-5 gap-1">
+        <button onclick="navigate('home')" data-tab="home" class="nav-item active flex flex-col items-center justify-center py-1">
+          <div class="nav-pill px-3 py-1 rounded-xl text-slate-400 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+          </div>
+          <span class="nav-label text-[10px] text-slate-400 mt-0.5 tracking-wide">HOME</span>
+          <span class="nav-dot w-1.5 h-1.5 rounded-full bg-[#FF6A00] mt-0.5 opacity-0 transition"></span>
+        </button>
+
+        <button onclick="navigate('matches')" data-tab="matches" class="nav-item flex flex-col items-center justify-center py-1">
+          <div class="nav-pill px-3 py-1 rounded-xl text-slate-400 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <span class="nav-label text-[10px] text-slate-400 mt-0.5 tracking-wide">MATCHES</span>
+          <span class="nav-dot w-1.5 h-1.5 rounded-full bg-[#FF6A00] mt-0.5 opacity-0 transition"></span>
+        </button>
+
+        <button onclick="navigate('players')" data-tab="players" class="nav-item flex flex-col items-center justify-center py-1">
+          <div class="nav-pill px-3 py-1 rounded-xl text-slate-400 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <span class="nav-label text-[10px] text-slate-400 mt-0.5 tracking-wide">PLAYERS</span>
+          <span class="nav-dot w-1.5 h-1.5 rounded-full bg-[#FF6A00] mt-0.5 opacity-0 transition"></span>
+        </button>
+
+        <button onclick="navigate('shop')" data-tab="shop" class="nav-item flex flex-col items-center justify-center py-1">
+          <div class="nav-pill px-3 py-1 rounded-xl text-slate-400 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+          </div>
+          <span class="nav-label text-[10px] text-slate-400 mt-0.5 tracking-wide">SHOP</span>
+          <span class="nav-dot w-1.5 h-1.5 rounded-full bg-[#FF6A00] mt-0.5 opacity-0 transition"></span>
+        </button>
+
+        <button onclick="navigate('profile')" data-tab="profile" class="nav-item flex flex-col items-center justify-center py-1">
+          <div class="nav-pill px-3 py-1 rounded-xl text-slate-400 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <span class="nav-label text-[10px] text-slate-400 mt-0.5 tracking-wide">PROFILE</span>
+          <span class="nav-dot w-1.5 h-1.5 rounded-full bg-[#FF6A00] mt-0.5 opacity-0 transition"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- MODALS OVERLAY -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-end sm:items-center justify-center p-3" onclick="if(event.target===this) closeAllModals()">
+      <!-- Dynamic Modal Content -->
+      <div id="modalCard" class="w-full max-w-[416px] bg-[#151518] border border-orange-500/30 rounded-2xl p-4 max-h-[86vh] overflow-y-auto shadow-2xl"></div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastBanner" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-[#1C1C21] border border-orange-500/50 text-white text-xs font-semibold shadow-xl hidden items-center gap-2 max-w-[390px]">
+      <span class="w-2 h-2 rounded-full bg-[#FF6A00]"></span>
+      <span id="toastText"></span>
+    </div>
+  </div>
+
+  <script>
+    // ==================== STATE & DATA ====================
+    const state = {
+      isAuthenticated: true,
+      authTab: 'signin',
+      currentView: 'home',
+      isAdminMode: false,
+      selectedCategory: null,
+      matchFilter: 'all',
+      shopTab: 'diamonds',
+      playerRoleFilter: 'ALL',
+      playerSearch: '',
+      bannerIndex: 0,
+      user: {
+        name: 'MD Robiul Islam',
+        email: 'robiul.lof@gmail.com',
+        uid: '2489104721',
+        role: 'Rusher',
+        whatsapp: '+8801712345678',
+        availableForHire: true,
+        hireRate: '৳50 / Match',
+        depositBalance: 70,
+        winningBalance: 50,
+        matchesPlayed: 42,
+        totalWins: 11,
+        totalKills: 189
+      },
+      banners: [
+        {
+          id: 'b1',
+          thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+          fallbackBg: 'linear-gradient(135deg, #7C2D12 0%, #EA580C 50%, #1E1B4B 100%)',
+          ytUrl: 'https://www.youtube.com/@LegendsofFireEsports',
+          label: 'কিভাবে LEGENDS OF FIRE তে টুর্নামেন্ট খেলবেন A টু Z'
+        },
+        {
+          id: 'b2',
+          thumb: 'https://img.youtube.com/vi/M7lc1UVf-VE/maxresdefault.jpg',
+          fallbackBg: 'linear-gradient(135deg, #991B1B 0%, #F59E0B 50%, #09090B 100%)',
+          ytUrl: 'https://www.youtube.com',
+          label: 'FRIDAY GRAND SQUAD CHAMPIONSHIP — ৳5,000 PRIZE POOL'
+        }
+      ],
+      categories: [
+        { id: 'br', title: 'BR Match', subtitle: 'Full Map Survival', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80' },
+        { id: 'esports', title: 'E-Sports Mode', subtitle: 'Pro League Rules', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80' },
+        { id: 'lonewolf', title: 'Lone Wolf', subtitle: '1v1 / 2v2 Fast', image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80' },
+        { id: 'losttowin', title: 'Lost to Win', subtitle: 'Bonus Comeback', image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80' },
+        { id: 'solo', title: 'Solo Tournament', subtitle: 'Individual Glory', image: 'https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=600&q=80' },
+        { id: 'duo', title: 'Duo Tournament', subtitle: '2-Player Synergy', image: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=600&q=80' },
+        { id: 'squad', title: 'Squad Tournament', subtitle: '4v4 Clash & BR', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80' },
+        { id: 'custom', title: 'Custom Room', subtitle: 'Unlimited Ammo', image: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80' }
+      ],
+      tournaments: [
+        {
+          id: 't1',
+          category: 'br',
+          title: 'BR SOLO | MATCH #104',
+          note: 'অবশ্য রুলস পড়বেন ✅',
+          date: '2026-11-14 09:30 PM',
+          prizePool: 300,
+          perKill: 7,
+          entryFee: 10,
+          mode: 'CLASSIC SOLO',
+          map: 'BERMUDA',
+          totalSlots: 32,
+          joinedSlots: 24,
+          status: 'UPCOMING',
+          countdown: '00h 48m 16s',
+          roomId: '88492014',
+          roomPass: 'LOF99',
+          registered: false
+        },
+        {
+          id: 't2',
+          category: 'duo',
+          title: 'BR DUO | NIGHT CLASH',
+          note: 'অবশ্য রুলস পড়বেন ✅',
+          date: '2026-11-14 10:00 PM',
+          prizePool: 400,
+          perKill: 5,
+          entryFee: 10,
+          mode: 'CLASSIC DUO',
+          map: 'BERMUDA',
+          totalSlots: 48,
+          joinedSlots: 31,
+          status: 'UPCOMING',
+          countdown: '01h 18m 16s',
+          roomId: '77102934',
+          roomPass: 'DUO77',
+          registered: true
+        },
+        {
+          id: 't3',
+          category: 'squad',
+          title: 'SQUAD CHAMPIONSHIP',
+          note: 'এমুলেটর অ্যালাউড না ❌',
+          date: '2026-11-14 10:45 PM',
+          prizePool: 1200,
+          perKill: 15,
+          entryFee: 40,
+          mode: 'ESPORTS SQUAD',
+          map: 'PURGATORY',
+          totalSlots: 12,
+          joinedSlots: 10,
+          status: 'LIVE',
+          countdown: 'LIVE NOW',
+          roomId: '99201844',
+          roomPass: 'FIRE26',
+          registered: true
+        },
+        {
+          id: 't4',
+          category: 'lonewolf',
+          title: 'LONE WOLF 1V1 KING',
+          note: 'হেডশট অনলি রাউন্ড 🔥',
+          date: '2026-11-14 11:15 PM',
+          prizePool: 150,
+          perKill: 0,
+          entryFee: 15,
+          mode: 'LONE WOLF 1V1',
+          map: 'IRON CAGE',
+          totalSlots: 16,
+          joinedSlots: 9,
+          status: 'UPCOMING',
+          countdown: '02h 33m 10s',
+          roomId: '55190233',
+          roomPass: 'LW101',
+          registered: false
+        }
+      ],
+      playersDirectory: [
+        { id: 'p1', name: 'LGFㅤRAFI', uid: '1928374650', role: 'Rusher', kd: '4.85', whatsapp: '8801711002233', rate: '৳60 / Match', online: true },
+        { id: 'p2', name: 'NOVAㅤSAJID', uid: '5647382910', role: 'Sniper', kd: '5.12', whatsapp: '8801811223344', rate: '৳80 / Match', online: true },
+        { id: 'p3', name: 'BDㅤTANVIR', uid: '8374659201', role: 'IGL', kd: '3.95', whatsapp: '8801911445566', rate: '৳100 / Tourney', online: true },
+        { id: 'p4', name: 'FIREㅤNAHID', uid: '3029384756', role: 'Supporter', kd: '3.60', whatsapp: '8801611778899', rate: '৳50 / Match', online: false }
+      ],
+      diamondPackages: [
+        { id: 'd1', name: '25 Diamonds', bonus: '+3 Bonus', price: 25, tag: 'INSTANT UID' },
+        { id: 'd2', name: '115 Diamonds', bonus: '+12 Bonus', price: 85, tag: 'POPULAR' },
+        { id: 'd3', name: '240 Diamonds', bonus: '+25 Bonus', price: 170, tag: 'FAST' },
+        { id: 'd4', name: '610 Diamonds', bonus: '+65 Bonus', price: 420, tag: 'HOT DEAL' },
+        { id: 'd5', name: 'Weekly Membership', bonus: '450 💎 Total', price: 165, tag: 'VIP PASS' },
+        { id: 'd6', name: 'Monthly Membership', bonus: '2600 💎 Total', price: 790, tag: 'BEST VALUE' }
+      ],
+      shopProducts: [
+        { id: 's1', name: 'Pro Gaming Finger Sleeves', desc: 'Ultra-thin silver fiber anti-sweat thumbs', price: 120, stock: 'In Stock' },
+        { id: 's2', name: 'Legends of Fire Jersey (2026)', desc: 'Custom IGN printed official esports jersey', price: 550, stock: 'Pre-Order' },
+        { id: 's3', name: 'VIP Tournament Season Pass', desc: '50% off entry fees for 30 days', price: 199, stock: 'Instant' }
+      ],
+      transactions: [
+        { id: 'TX901', type: 'Deposit', method: 'Nagad', trxId: '7K9M2P1Q', amount: 100, status: 'Approved', time: 'Today, 07:15 PM' },
+        { id: 'TX902', type: 'Match Entry', method: 'Wallet', trxId: 'BR-DUO', amount: -10, status: 'Completed', time: 'Today, 08:05 PM' },
+        { id: 'TX903', type: 'Prize Win', method: 'Winning', trxId: 'SOLO-#99', amount: 50, status: 'Approved', time: 'Yesterday' }
+      ],
+      notifications: [
+        { id: 'n1', title: 'Room ID & Password Updated!', body: 'BR DUO | NIGHT CLASH Room ID: 77102934 | Pass: DUO77', time: '5m ago' },
+        { id: 'n2', title: 'Deposit Verified (+৳100)', body: 'Your Nagad deposit TrxID 7K9M2P1Q has been approved.', time: '2h ago' }
+      ],
+      paymentNumbers: {
+        bkash: { label: 'bKash Merchant', type: 'Merchant Account', number: '01700000000', dial: '*247#' },
+        nagad: { label: 'Nagad', type: 'Personal Account', number: '01827720224', dial: '*167#' },
+        rocket: { label: 'Rocket', type: 'Personal Account', number: '01900000000', dial: '*322#' }
+      }
+    };
+
+    // ==================== HELPERS ====================
+    function showToast(msg) {
+      const el = document.getElementById('toastBanner');
+      document.getElementById('toastText').textContent = msg;
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }, 3000);
+    }
+
+    function syncHeader() {
+      const total = state.user.depositBalance + state.user.winningBalance;
+      const el = document.getElementById('headerTotalBalance');
+      if (el) el.textContent = `৳${total}`;
+      const adminBtn = document.getElementById('adminToggleBtn');
+      if (adminBtn) {
+        adminBtn.textContent = state.isAdminMode ? 'PLAYER' : 'ADMIN';
+        adminBtn.className = state.isAdminMode
+          ? 'px-2.5 py-1 rounded-full text-[10px] font-orbitron font-bold tracking-wider bg-orange-500 text-white shadow-md shadow-orange-500/40'
+          : 'px-2.5 py-1 rounded-full text-[10px] font-orbitron font-bold tracking-wider border border-orange-500/40 bg-orange-500/10 text-orange-400';
+      }
+    }
+
+    function navigate(view, extra = null) {
+      if (extra) state.selectedCategory = extra;
+      state.currentView = view;
+      state.isAdminMode = false;
+      syncHeader();
+
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        const isActive = btn.dataset.tab === view;
+        btn.classList.toggle('active', isActive);
+      });
+
+      const header = document.getElementById('topHeader');
+      const bottomNav = document.getElementById('bottomNav');
+      const fab = document.getElementById('floatingSupport');
+
+      if (!state.isAuthenticated || view === 'auth') {
+        header.classList.add('hidden');
+        bottomNav.classList.add('hidden');
+        fab.classList.add('hidden');
+        renderAuthView();
+        return;
+      } else {
+        header.classList.remove('hidden');
+        bottomNav.classList.remove('hidden');
+        fab.classList.remove('hidden');
+      }
+
+      const main = document.getElementById('mainContainer');
+      if (view === 'home') renderHomeView(main);
+      else if (view === 'category') renderCategoryMatchesView(main);
+      else if (view === 'matches') renderMyMatchesView(main);
+      else if (view === 'players') renderPlayersView(main);
+      else if (view === 'shop') renderShopView(main);
+      else if (view === 'profile') renderProfileView(main);
+      else if (view === 'add-money') renderAddMoneySelectView(main);
+      else if (view === 'withdraw') renderWithdrawView(main);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleAdminMode() {
+      state.isAdminMode = !state.isAdminMode;
+      syncHeader();
+      const main = document.getElementById('mainContainer');
+      if (state.isAdminMode) renderAdminView(main);
+      else navigate(state.currentView || 'home');
+    }
+
+    // ==================== AUTH VIEW (NO DEMO/LOBBY BUTTONS) ====================
+    function renderAuthView() {
+      const main = document.getElementById('mainContainer');
+      const isSignUp = state.authTab === 'signup';
+      main.innerHTML = `
+        <div class="min-h-[88vh] flex flex-col justify-center py-6 px-1">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#FF6A00] to-[#FF3B00] flex items-center justify-center shadow-xl shadow-orange-500/30 mb-3">
+              <svg class="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M13.5 2C13.5 2 14.5 5.5 12 8C10.5 9.5 8.5 9 8.5 9C8.5 9 9.5 11.5 7.5 13.5C6.2 14.8 5 14.5 5 14.5C5 18.6 8.1 22 12 22C16.4 22 20 18.4 20 14C20 8.5 13.5 2 13.5 2Z"/>
+              </svg>
+            </div>
+            <h1 class="font-orbitron font-black text-2xl tracking-wider fire-gradient-text">LEGENDS OF FIRE</h1>
+            <p class="text-xs text-slate-400 tracking-widest uppercase mt-1">Bangladesh Premium Esports Arena</p>
+          </div>
+
+          <div class="card-surface rounded-2xl p-4 border border-orange-500/25 shadow-2xl">
+            <div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#0D0D10] mb-4">
+              <button onclick="state.authTab='signin'; renderAuthView()" class="py-2 rounded-lg font-orbitron text-xs font-bold transition ${!isSignUp ? 'fire-btn text-white' : 'text-slate-400'}">SIGN IN</button>
+              <button onclick="state.authTab='signup'; renderAuthView()" class="py-2 rounded-lg font-orbitron text-xs font-bold transition ${isSignUp ? 'fire-btn text-white' : 'text-slate-400'}">SIGN UP</button>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
+              ${isSignUp ? `
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Full Name / IGN</label>
+                  <input id="authName" type="text" required placeholder="e.g. LGFㅤROBIUL" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Free Fire UID</label>
+                    <input id="authUid" type="number" required placeholder="2489104721" class="w-full px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">WhatsApp</label>
+                    <input id="authWa" type="tel" required placeholder="017XXXXXXXX" class="w-full px-3 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+                  </div>
+                </div>
+              ` : ''}
+
+              <div>
+                <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Email Address</label>
+                <input id="authEmail" type="email" required value="robiul.lof@gmail.com" placeholder="player@legendsoffire.gg" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] font-bold text-slate-300 uppercase">Password</label>
+                  ${!isSignUp ? `<button type="button" onclick="showToast('Password reset link sent to your email!')" class="text-[11px] text-orange-400 hover:underline">Forgot Password?</button>` : ''}
+                </div>
+                <input id="authPass" type="password" required value="••••••••" placeholder="Enter password" class="w-full px-3.5 py-2.5 rounded-xl bg-[#0D0D10] border border-white/10 text-sm text-white focus:border-orange-500 outline-none" />
+              </div>
+
+              <button type="submit" class="w-full py-3 rounded-xl fire-btn font-orbitron font-bold text-xs tracking-wider text-white uppercase mt-2">
+                ${isSignUp ? 'CREATE ESPORTS ACCOUNT' : 'ENTER TOURNAMENT ARENA'}
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      if (state.authTab === 'signup') {
+        const name = document.getElementById('authName')?.value.trim();
+        const uid = document.getElementById('authUid')?.value.trim();
+        const wa = document.getElementById('authWa')?.value.trim();
+        if (name) state.user.name = name;
+        if (uid) state.user.uid = uid;
+        if (wa) state.user.whatsapp = wa;
+      }
+      const email = document.getElementById('authEmail')?.value.trim();
+      if (email) state.user.email = email;
+      state.isAuthenticated = true;
+      showToast('Welcome to LEGENDS OF FIRE!');
+      navigate('home');
+    }
+
+    // ==================== HOME VIEW ====================
+    function renderHomeView(main) {
+      const activeBanner = state.banners[state.bannerIndex % state.banners.length];
+      main.innerHTML = `
+        <!-- FULL-BLEED 16:9 YOUTUBE THUMBNAIL SLIDER -->
+        <div class="relative rounded-2xl overflow-hidden border border-orange-500/35 shadow-xl shadow-orange-500/10 aspect-[16/9] cursor-pointer group" onclick="window.open('${activeBanner.ytUrl}', '_blank')">
+          <img src="${activeBanner.thumb}" onerror="this.style.display='none'" alt="Promo Banner" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" />
+          <div class="absolute inset-0 -z-10" style="background:${activeBanner.fallbackBg}"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+          <div class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full bg-red-600/95 text-white text-[10px] font-bold flex items-center gap-1 shadow-lg">
+            <span>▶</span> YOUTUBE
+          </div>
+          <div class="absolute bottom-7 left-3 right-3">
+            <p class="font-bangla font-bold text-sm text-white drop-shadow line-clamp-1">${activeBanner.label}</p>
+          </div>
+          <!-- Dots Overlaid at Bottom Edge -->
+          <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5" onclick="event.stopPropagation()">
+            ${state.banners.map((b, i) => `
+              <button onclick="state.bannerIndex=${i}; renderHomeView(document.getElementById('mainContainer'))" class="h-1.5 rounded-full transition-all ${i === (state.bannerIndex % state.banners.length) ? 'w-6 bg-[#FF6A00]' : 'w-1.5 bg-white/50'}"></button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- GLOWING ANNOUNCEMENT MARQUEE -->
+        <div class="card-surface rounded-xl px-3 py-2.5 border border-orange-500/30 flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+            </svg>
+          </div>
+          <div class="marquee-wrap flex-1 text-xs font-bangla font-semibold text-amber-200">
+            <div class="marquee-track">
+              স্বাগতম LEGENDS OF FIRE-এ! যেকোনো সমস্যায় টেলিগ্রামে জয়েন করুন এবং এডমিনের সাথে যোগাযোগ করুন। প্রতিদিন ফ্রি ও পেইড টুর্নামেন্ট খেলুন!
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK COMMUNITY & HIRE STRIP -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <button onclick="openModal('modalSupport')" class="py-2.5 px-3 rounded-xl bg-[#16181F] border border-sky-500/30 flex items-center justify-center gap-2 text-xs font-bold text-sky-400">
+            <span>✈️</span> Telegram Channel
+          </button>
+          <button onclick="navigate('players')" class="py-2.5 px-3 rounded-xl bg-[#16181F] border border-orange-500/35 flex items-center justify-center gap-2 text-xs font-bold text-orange-400">
+            <span>🔥</span> Hire Pro Players
+          </button>
+        </div>
+
+        <!-- 2-COLUMN FULL-BLEED POSTER CATEGORY GRID -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <h2 class="font-orbitron font-bold text-xs tracking-wider text-slate-200 uppercase">Esports Match Modes</h2>
+            <span class="text-[11px] text-orange-400 font-semibold">${state.tournaments.length} Live Rooms</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            ${state.categories.map(cat => {
+              const count = state.tournaments.filter(t => t.category === cat.id).length;
+              return `
+                <div onclick="navigate('category', '${cat.id}')" class="card-surface rounded-2xl overflow-hidden border border-white/10 hover:border-orange-500/50 transition cursor-pointer group">
+                  <div class="relative aspect-[16/10] overflow-hidden bg-[#1E1E24]">
+                    <img src="${cat.image}" alt="${cat.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#151515] via-transparent to-black/25"></div>
+                    <div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/75 border border-orange-500/50 flex items-center justify-center text-[11px]">🔥</div>
+                  </div>
+                  <div class="p-2.5">
+                    <h3 class="font-bold text-sm text-white leading-tight">${cat.title}</h3>
+                    <p class="text-[11px] text-orange-400 font-semibold mt-0.5">${count > 0 ? count + ' matches found' : 'Open lobby'}</p>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== CATEGORY MATCHES LISTING ====================
+    function renderCategoryMatchesView(main) {
+      const cat = state.categories.find(c => c.id === state.selectedCategory) || state.categories[0];
+      const matches = state.tournaments.filter(t => t.category === cat.id || state.tournaments.length > 0);
+      main.innerHTML = `
+        <div class="flex items-center gap-2.5 mb-2">
+          <button onclick="navigate('home')" class="w-9 h-9 rounded-xl bg-[#18181D] border border-white/10 flex items-center justify-center text-white">←</button>
+          <div>
+            <h1 class="font-orbitron font-bold text-sm text-white uppercase">${cat.title}</h1>
+            <p class="text-xs text-slate-400">${cat.subtitle}</p>
+          </div>
+        </div>
+        <div class="space-y-3.5">
+          ${matches.map(m => renderTournamentCard(m)).join('')}
+        </div>
+      `;
+    }
+
+    function renderTournamentCard(m) {
+      const pct = Math.min(100, Math.round((m.joinedSlots / m.totalSlots) * 100));
+      const spotsLeft = Math.max(0, m.totalSlots - m.joinedSlots);
+      return `
+        <div class="card-surface rounded-2xl p-3.5 border border-orange-500/20 space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-600 to-red-700 flex items-center justify-center font-orbitron font-black text-xs text-white text-center p-1 shrink-0 border border-orange-400/40">
+              ${m.mode.split(' ')[0]}<br/>MATCH
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="font-bold text-sm text-white truncate">🎮 ${m.title}</h3>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${m.status === 'LIVE' ? 'bg-red-500/20 text-red-400 border border-red-500/40' : 'bg-orange-500/15 text-orange-400 border border-orange-500/30'}">${m.status}</span>
+              </div>
+              <p class="text-xs font-bangla text-emerald-400 mt-0.5">${m.note}</p>
+              <p class="text-[11px] text-amber-400 font-semibold mt-0.5">${m.date}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div class="bg-[#1C1C22] rounded-xl p-2 text-center border border-white/5">
+              <div class="text-[10px] text-slate-400 font-semibold">PRIZE POOL</div>
+              <div class="font-orbitron font-bold text-sm text-sky-400 mt-0.5">৳${m.prizePool}</div>
+            </div>
+            <div class="bg-[#1C1C22] rounded-xl p-2 text-center border border-white/5">
+              <div class="text-[10px] text-slate-400 font-semibold">PER KILL</div>
+              <div class="font-orbitron font-bold text-sm text-amber-400 mt-0.5">৳${m.perKill}</div>
+            </div>
+            <div class="bg-[#1C1C22] rounded-xl p-2 text-center border border-white/5">
+              <div class="text-[10px] text-slate-400 font-semibold">ENTRY FEE</div>
+              <div class="font-orbitron font-bold text-sm text-rose-400 mt-0.5">৳${m.entryFee}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-300 font-semibold">
+            <span>⚔️ ${m.mode}</span>
+            <span>📍 ${m.map}</span>
+            <span>👥 ${m.joinedSlots}/${m.totalSlots}</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="flex-1">
+              <div class="h-1.5 w-full bg-[#24242C] rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-[#FF6A00] to-[#F59E0B] rounded-full" style="width:${pct}%"></div>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Only ${spotsLeft} spots left</p>
+            </div>
+            ${m.registered
+              ? `<button onclick="openRoomModal('${m.id}')" class="px-4 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 font-orbitron font-bold text-xs">JOINED ✓</button>`
+              : `<button onclick="openJoinModal('${m.id}')" class="px-4 py-2 rounded-xl fire-btn font-orbitron font-bold text-xs text-white">JOIN NOW</button>`
+            }
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="openRoomModal('${m.id}')" class="py-2 rounded-xl bg-[#191920] border border-orange-500/25 text-orange-300 text-xs font-bold flex items-center justify-center gap-1.5">
+              🔑 Room ID
+            </button>
+            <button onclick="openPrizeModal('${m.id}')" class="py-2 rounded-xl bg-[#191920] border border-white/10 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5">
+              🏆 Prize Pool
+            </button>
+          </div>
+
+          <div class="rounded-xl bg-[#1D1510] border border-orange-500/25 py-2 text-center font-orbitron text-[11px] font-bold text-orange-300 tracking-wider">
+            🕒 STARTS IN <span class="text-white ml-1">${m.countdown}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== MY MATCHES VIEW ====================
+    function renderMyMatchesView(main) {
+      const joined = state.tournaments.filter(t => t.registered);
+      main.innerHTML = `
+        <div class="flex items-center justify-between">
+          <h1 class="font-orbitron font-bold text-base text-white">MY MATCHES</h1>
+          <span class="px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-bold">${joined.length} Registered</span>
+        </div>
+        ${joined.length === 0 ? `
+          <div class="card-surface rounded-2xl p-8 text-center space-y-3">
+            <p class="text-sm text-slate-300">You haven't joined any tournament yet.</p>
+            <button onclick="navigate('home')" class="px-5 py-2.5 rounded-xl fire-btn font-orbitron text-xs font-bold text-white">BROWSE MATCHES</button>
+          </div>
+        ` : `
+          <div class="space-y-3.5">
+            ${joined.map(m => renderTournamentCard(m)).join('')}
+          </div>
+        `}
+      `;
+    }
+
+    // ==================== PLAYERS HIRING MARKETPLACE ====================
+    function renderPlayersView(main) {
+      const roles = ['ALL', 'Rusher', 'Sniper', 'Supporter', 'IGL'];
+      // Combine directory with current user if hire toggle is ON
+      let list = [...state.playersDirectory];
+      if (state.user.availableForHire) {
+        list.unshift({
+          id: 'me',
+          name: state.user.name + ' (YOU)',
+          uid: state.user.uid,
+          role: state.user.role,
+          kd: '4.50',
+          whatsapp: state.user.whatsapp.replace(/\D/g, ''),
+          rate: state.user.hireRate,
+          online: true
+        });
+      }
+      const filtered = list.filter(p => {
+        const matchRole = state.playerRoleFilter === 'ALL' || p.role.toLowerCase() === state.playerRoleFilter.toLowerCase();
+        const matchSearch = !state.playerSearch || p.name.toLowerCase().includes(state.playerSearch.toLowerCase()) || p.uid.includes(state.playerSearch);
+        return matchRole && matchSearch;
+      });
+
+      main.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="font-orbitron font-bold text-base text-white">HIRE PRO PLAYERS</h1>
+            <p class="text-xs text-slate-400">Recruit squad teammates via WhatsApp or in-app</p>
+          </div>
+          <button onclick="navigate('profile')" class="px-2.5 py-1.5 rounded-xl bg-orange-500/15 border border-orange-500/35 text-[11px] font-bold text-orange-400">
+            ${state.user.availableForHire ? '● LISTED' : '○ LIST ME'}
+          </button>
+        </div>
+
+        <input type="text" value="${state.playerSearch}" oninput="state.playerSearch=this.value; renderPlayersView(document.getElementById('mainContainer'))" placeholder="Search player name or Free Fire UID..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#151518] border border-white/10 text-xs text-white focus:border-orange-500 outline-none" />
+
+        <div class="flex gap-1.5 overflow-x-auto scrollbar-none pb-1">
+          ${roles.map(r => `
+            <button onclick="state.playerRoleFilter='${r}'; renderPlayersView(document.getElementById('mainContainer'))" class="px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 ${state.playerRoleFilter === r ? 'fire-btn text-white' : 'bg-[#16161B] text-slate-400 border border-white/10'}">${r}</button>
+          `).join('')}
+        </div>
+
+        <div class="space-y-3">
+          ${filtered.map(p => `
+            <div class="card-surface rounded-2xl p-3.5 border border-orange-500/20 space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-orbitron font-black text-white text-sm">
+                    ${p.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <h3 class="font-bold text-sm text-white">${p.name}</h3>
+                      <span class="w-2 h-2 rounded-full ${p.online ? 'bg-emerald-400' : 'bg-slate-500'}"></span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">UID: <span class="text-slate-200 font-semibold">${p.uid}</span> • K/D: <span class="text-amber-400 font-bold">${p.kd}</span></p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-orange-500/15 border border-orange-500/30 text-[11px] font-bold text-orange-400">${p.role}</span>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-white/5">
+                <span class="text-xs font-bold text-emerald-400">${p.rate}</span>
+                <div class="flex gap-2">
+                  <a href="https://wa.me/${p.whatsapp}?text=Hello%20${encodeURIComponent(p.name)},%20I%20want%20to%20hire%20you%20for%20a%20Free%20Fire%20tournament%20on%20LEGENDS%20OF%20FIRE!" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">
+                    WHATSAPP
+                  </a>
+                  <button onclick="showToast('Hire request sent to ${p.name}!')" class="px-3 py-1.5 rounded-xl fire-btn text-white text-xs font-bold">
+                    HIRE NOW
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // ==================== DUAL SHOP VIEW (DIAMONDS + PRODUCTS) ====================
+    function renderShopView(main) {
+      main.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="font-orbitron font-bold text-base text-white">ESPORTS & DIAMOND SHOP</h1>
+            <p class="text-xs text-slate-400">Instant UID Top-Up & Pro Gaming Gear</p>
+          </div>
+          <span class="text-xs font-bold text-amber-400">Wallet: ৳${state.user.depositBalance + state.user.winningBalance}</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-[#151519] border border-white/10">
+          <button onclick="state.shopTab='diamonds'; renderShopView(document.getElementById('mainContainer'))" class="py-2 rounded-lg text-xs font-orbitron font-bold ${state.shopTab === 'diamonds' ? 'fire-btn text-white' : 'text-slate-400'}">💎 DIAMOND TOP-UP</button>
+          <button onclick="state.shopTab='products'; renderShopView(document.getElementById('mainContainer'))" class="py-2 rounded-lg text-xs font-orbitron font-bold ${state.shopTab === 'products' ? 'fire-btn text-white' : 'text-slate-400'}">🛍️ PRO PRODUCTS</button>
+        </div>
+
+        ${state.shopTab === 'diamonds' ? `
+          <div class="card-surface rounded-2xl p-3 border border-orange-500/25">
+            <label class="block text-[11px] font-bold text-orange-400 uppercase mb-1">Target Free Fire Player UID</label>
+            <input id="topupTargetUid" type="number" value="${state.user.uid}" class="w-full px-3 py-2 rounded-xl bg-[#0C0C0F] border border-white/10 text-sm font-bold text-white outline-none focus:border-orange-500" />
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            ${state.diamondPackages.map(d => `
+              <div class="card-surface rounded-2xl p-3 border border-white/10 flex flex-col justify-between space-y-2.5">
+                <div>
+                  <span class="px-2 py-0.5 rounded bg-orange-500/15 text-orange-400 text-[9px] font-bold">${d.tag}</span>
+                  <h3 class="font-bold text-sm text-white mt-1.5">💎 ${d.name}</h3>
+                  <p class="text-[11px] text-emerald-400 font-semibold">${d.bonus}</p>
+                </div>
+                <button onclick="buyShopItem('${d.name}', ${d.price}, true)" class="w-full py-2 rounded-xl fire-btn font-orbitron font-bold text-xs text-white">
+                  BUY • ৳${d.price}
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        ` : `
+          <div class="space-y-3">
+            ${state.shopProducts.map(p => `
+              <div class="card-surface rounded-2xl p-3.5 border border-white/10 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[10px] font-bold text-emerald-400 uppercase">${p.stock}</span>
+                  <h3 class="font-bold text-sm text-white mt-0.5">${p.name}</h3>
+                  <p class="text-xs text-slate-400 mt-0.5">${p.desc}</p>
+                  <p class="font-orbitron font-bold text-sm text-orange-400 mt-1.5">৳${p.price}</p>
+                </div>
+                <button onclick="buyShopItem('${p.name}', ${p.price}, false)" class="px-4 py-2.5 rounded-xl fire-btn font-orbitron font-bold text-xs text-white shrink-0">
+                  ORDER
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      `;
+    }
+
+    function buyShopItem(itemName, price, isDiamond) {
+      const total = state.user.depositBalance + state.user.winningBalance;
+      if (total < price) {
+        showToast('Insufficient balance! Please Add Money first.');
+        navigate('add-money');
+        return;
+      }
+      if (state.user.depositBalance >= price) {
+        state.user.depositBalance -= price;
+      } else {
+        const rem = price - state.user.depositBalance;
+        state.user.depositBalance = 0;
+        state.user.winningBalance -= rem;
+      }
+      const uid = isDiamond ? (document.getElementById('topupTargetUid')?.value || state.user.uid) : '';
+      state.transactions.unshift({
+        id: 'TX' + Math.floor(100 + Math.random() * 900),
+        type: isDiamond ? 'Diamond Top-Up' : 'Shop Order',
+        method: 'Wallet',
+        trxId: isDiamond ? `UID:${uid}` : itemName.slice(0, 10),
+        amount: -price,
+        status: 'Completed',
+        time: 'Just now'
+      });
+      syncHeader();
+      showToast(`${itemName} ordered successfully!`);
+      renderShopView(document.getElementById('mainContainer'));
+    }
+
+    // ==================== PROFILE & VIRTUAL WALLET CARD VIEW ====================
+    function renderProfileView(main) {
+      const total = state.user.depositBalance + state.user.winningBalance;
+      main.innerHTML = `
+        <!-- PROFILE HEADER CARD -->
+        <div class="card-surface rounded-2xl p-4 text-center relative">
+          <div class="w-20 h-20 mx-auto avatar-ring">
+            <div class="w-full h-full rounded-full bg-[#3A261E] flex items-center justify-center font-orbitron font-black text-2xl text-white">
+              ${state.user.name.charAt(0).toUpperCase()}
+            </div>
+          </div>
+          <h2 class="font-bold text-lg text-white mt-3">${state.user.name}</h2>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1C1C22] border border-white/10 text-xs text-slate-300 mt-1.5">
+            <span>✉️ ${state.user.email}</span>
+            <button onclick="navigator.clipboard?.writeText('${state.user.email}'); showToast('Email copied!')" class="text-orange-400 font-bold">❐</button>
+          </div>
+        </div>
+
+        <!-- VIRTUAL DEBIT WALLET CARD -->
+        <div class="virtual-card rounded-2xl p-4 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-orange-400">🔥</div>
+              <div>
+                <div class="text-[10px] text-slate-400 tracking-widest uppercase">WALLET</div>
+                <div class="font-orbitron font-bold text-xs text-orange-300">LEGENDS OF FIRE</div>
+              </div>
+            </div>
+            <span class="text-slate-300 text-sm">)))</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-7 rounded-md bg-gradient-to-br from-amber-300 to-amber-600 border border-amber-200/50"></div>
+            <div>
+              <div class="text-[10px] text-slate-400 tracking-widest uppercase">TOTAL BALANCE</div>
+              <div class="font-orbitron font-black text-2xl text-white">৳${total}</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div class="rounded-xl bg-black/35 border border-white/10 p-2.5 flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm">💳</div>
+              <div>
+                <div class="text-[10px] text-slate-400 uppercase">DEPOSIT</div>
+                <div class="font-bold text-sm text-white">৳${state.user.depositBalance}</div>
+              </div>
+            </div>
+            <div class="rounded-xl bg-black/35 border border-white/10 p-2.5 flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">🏆</div>
+              <div>
+                <div class="text-[10px] text-slate-400 uppercase">WINNING</div>
+                <div class="font-bold text-sm text-white">৳${state.user.winningBalance}</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-[9px] text-slate-400 tracking-widest uppercase">CARD HOLDER</div>
+            <div class="font-orbitron font-bold text-xs text-white tracking-wider uppercase mt-0.5">${state.user.name}</div>
+          </div>
+        </div>
+
+        <!-- ADD MONEY & WITHDRAW ACTION TILES -->
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="navigate('add-money')" class="rounded-2xl p-4 bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex flex-col items-center justify-center gap-2 shadow-lg shadow-emerald-900/30">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-2xl font-bold">+</div>
+            <span class="font-bold text-sm">Add Money</span>
+          </button>
+          <button onclick="navigate('withdraw')" class="rounded-2xl p-4 bg-gradient-to-br from-rose-500 to-purple-700 text-white flex flex-col items-center justify-center gap-2 shadow-lg shadow-rose-900/30">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-2xl font-bold">−</div>
+            <span class="font-bold text-sm">Withdraw</span>
+          </button>
+        </div>
+
+        <!-- ESPORTS PLAYER CARD & AVAILABLE FOR HIRE TOGGLE -->
+        <div class="card-surface rounded-2xl p-4 border border-orange-500/30 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-orbitron font-bold text-xs text-orange-400 uppercase">Esports Player Roster Card</h3>
+              <p class="text-[11px] text-slate-400">Turn ON to appear in the Players Hire list</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" ${state.user.availableForHire ? 'checked' : ''} onchange="state.user.availableForHire=this.checked; showToast(this.checked ? 'You are now LIVE in Players Hire list!' : 'Hidden from Players Hire list')" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:bg-[#FF6A00] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-[#1B1B21] p-2.5 rounded-xl">
+              <span class="text-slate-400 block text-[10px]">FREE FIRE UID</span>
+              <span class="font-bold text-white">${state.user.uid}</span>
+            </div>
+            <div class="bg-[#1B1B21] p-2.5 rounded-xl">
+              <span class="text-slate-400 block text-[10px]">PRIMARY ROLE</span>
+              <span class="font-bold text-orange-400">${state.user.role}</span>
+            </div>
+            <div class="bg-[#1B1B21] p-2.5 rounded-xl">
+              <span class="text-slate-400 block text-[10px]">WHATSAPP</span>
+              <span class="font-bold text-emerald-400">${state.user.whatsapp}</span>
+            </div>
+            <div class="bg-[#1B1B21] p-2.5 rounded-xl">
+              <span class="text-slate-400 block text-[10px]">HIRE FEE</span>
+              <span class="font-bold text-amber-400">${state.user.hireRate}</span>
+            </div>
+          </div>
+          <button onclick="openEditProfileModal()" class="w-full py-2.5 rounded-xl bg-orange-500/15 border border-orange-500/40 text-orange-300 font-bold text-xs">
+            ✏️ Update UID, Role & WhatsApp
+          </button>
+        </div>
+
+        <!-- PROFILE MENU ROWS (CLEANED AS REQUESTED) -->
+        <div class="space-y-2.5">
+          <button onclick="openModal('modalTransactions')" class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">↺</div>
+              <div>
+                <div class="font-bold text-sm text-white">Transaction History</div>
+                <div class="text-xs text-slate-400">View your wallet credits and debits.</div>
+              </div>
+            </div>
+            <span class="text-slate-400">›</span>
+          </button>
+
+          <button onclick="openEditProfileModal()" class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg">👤</div>
+              <div>
+                <div class="font-bold text-sm text-white">Edit Profile</div>
+                <div class="text-xs text-slate-400">Keep your account accurate and verified.</div>
+              </div>
+            </div>
+            <span class="text-slate-400">›</span>
+          </button>
+
+          <button onclick="navigator.clipboard?.writeText('https://legendsoffire.gg/ref/ROBIUL'); showToast('Referral link copied! Earn ৳5 per invite.')" class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">🎁</div>
+              <div>
+                <div class="font-bold text-sm text-white">Invite Friends</div>
+                <div class="text-xs text-slate-400">Earn ৳5 for each invite.</div>
+              </div>
+            </div>
+            <span class="text-slate-400">›</span>
+          </button>
+
+          <button onclick="openModal('modalLeaderboard')" class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">🏆</div>
+              <div>
+                <div class="font-bold text-sm text-white">Leaderboard</div>
+                <div class="text-xs text-slate-400">Track your progress for each goals.</div>
+              </div>
+            </div>
+            <span class="text-slate-400">›</span>
+          </button>
+
+          <div class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-lg">🔥</div>
+              <div>
+                <div class="font-bold text-sm text-white">Theme</div>
+                <div class="text-xs text-slate-400">Fire Dark Esports Edition</div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-400 text-[10px] font-bold">FIRE DARK</span>
+          </div>
+
+          <button onclick="showToast('Language: English / বাংলা Active')" class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-lg">🌐</div>
+              <div>
+                <div class="font-bold text-sm text-white">Language</div>
+                <div class="text-xs text-slate-400">English / বাংলা</div>
+              </div>
+            </div>
+            <span class="text-slate-400">›</span>
+          </button>
+
+          <button onclick="state.isAuthenticated=false; navigate('auth')" class="w-full card-surface rounded-2xl p-3.5 flex items-center justify-between text-left border border-rose-500/25">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg">↪</div>
+              <div>
+                <div class="font-bold text-sm text-rose-400">Logout</div>
+                <div class="text-xs text-slate-400">Sign out of your account</div>
+              </div>
+            </div>
+            <span class="text-rose-400">›</span>
+          </button>
+        </div>
+      `;
+    }
+
+    // ==================== ADD MONEY & WITHDRAW VIEWS ====================
+    function renderAddMoneySelectView(main) {
+      main.innerHTML = `
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span>💳 Balance:</span>
+          <span class="font-bold text-orange-400">৳${state.user.depositBalance + state.user.winningBalance}</span>
+        </div>
+        <div class="card-surface rounded-2xl p-4 space-y-3">
+          <div class="flex items-center gap-3">
+            <button onclick="navigate('profile')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white">←</button>
+            <h2 class="font-bold text-base text-white">Select Payment Method</h2>
+          </div>
+
+          ${Object.entries(state.paymentNumbers).map(([key, info]) => `
+            <button onclick="renderAddMoneyStep2('${key}')" class="w-full p-3.5 rounded-2xl bg-[#1A1A20] border border-white/10 hover:border-orange-500/50 flex items-center justify-between text-left">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl ${key === 'bkash' ? 'bg-pink-600' : key === 'nagad' ? 'bg-orange-600' : 'bg-purple-700'} flex items-center justify-center font-orbitron font-black text-white text-xs uppercase">
+                  ${key}
+                </div>
+                <div>
+                  <div class="font-bold text-sm text-white">${info.label}</div>
+                  <div class="text-xs text-slate-400">${info.type}</div>
+                </div>
+              </div>
+              <span class="text-slate-400">›</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderAddMoneyStep2(methodKey) {
+      const info = state.paymentNumbers[methodKey];
+      const main = document.getElementById('mainContainer');
+      main.innerHTML = `
+        <div class="card-surface rounded-2xl p-4 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <button onclick="navigate('add-money')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white">←</button>
+              <h2 class="font-bold text-sm text-white">Enter Transaction ID</h2>
+            </div>
+            <button onclick="navigate('add-money')" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-slate-300">Change Method</button>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#1B1B22] border border-white/10 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl ${methodKey === 'bkash' ? 'bg-pink-600' : methodKey === 'nagad' ? 'bg-orange-600' : 'bg-purple-700'} flex items-center justify-center font-orbitron font-bold text-xs text-white uppercase">${methodKey}</div>
+            <div>
+              <div class="font-bold text-sm text-white">${info.label}</div>
+              <div class="text-xs text-slate-400">${info.type}</div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl p-4 bg-gradient-to-br from-[#EA580C] to-[#C2410C] text-white space-y-3 font-bangla">
+            <ul class="text-xs space-y-1.5 list-disc pl-4">
+              <li>${info.dial} ডায়াল করুন অথবা ${info.label} অ্যাপ খুলুন।</li>
+              <li>"Send Money" অপশনে ট্যাপ করুন।</li>
+              <li>নিচের নম্বরটি প্রাপক হিসেবে দিন।</li>
+            </ul>
+
+            <div class="flex items-center gap-2">
+              <div class="flex-1 py-2.5 px-3 rounded-xl bg-black/25 font-orbitron font-bold text-sm tracking-wider text-center">${info.number}</div>
+              <button onclick="navigator.clipboard?.writeText('${info.number}'); showToast('Number copied!')" class="py-2.5 px-4 rounded-xl bg-black/30 text-xs font-bold">❐ Copy</button>
+            </div>
+
+            <ul class="text-xs space-y-1.5 list-disc pl-4">
+              <li>পেমেন্ট নিশ্চিত করে সম্পন্ন করুন।</li>
+              <li>নিচে Amount এবং Transaction ID লিখে VERIFY বাটনে ট্যাপ করুন।</li>
+            </ul>
+
+            <input id="depAmount" type="number" min="10" placeholder="Enter Amount (৳)" class="w-full px-3.5 py-2.5 rounded-xl bg-white/15 border border-white/30 text-white placeholder-white/75 text-sm font-bold outline-none" />
+            <input id="depTrxId" type="text" placeholder="Enter Transaction ID" class="w-full px-3.5 py-2.5 rounded-xl bg-white/15 border border-white/30 text-white placeholder-white/75 text-sm font-bold uppercase outline-none" />
+            <button onclick="submitDeposit('${info.label}')" class="w-full py-3 rounded-xl bg-white text-[#C2410C] font-orbitron font-black text-xs tracking-wider uppercase shadow-lg">
+              VERIFY DEPOSIT
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function submitDeposit(methodLabel) {
+      const amount = Number(document.getElementById('depAmount')?.value || 0);
+      const trxId = (document.getElementById('depTrxId')?.value || '').trim().toUpperCase();
+      if (amount < 10 || trxId.length < 5) {
+        showToast('Please enter valid Amount (min ৳10) & Transaction ID.');
+        return;
+      }
+      if (state.transactions.some(t => t.trxId === trxId)) {
+        showToast('Duplicate Transaction ID rejected!');
+        return;
+      }
+      state.transactions.unshift({
+        id: 'TX' + Math.floor(100 + Math.random() * 900),
+        type: 'Deposit',
+        method: methodLabel,
+        trxId,
+        amount,
+        status: 'Pending',
+        time: 'Just now'
+      });
+      showToast('Deposit submitted! Pending Admin verification.');
+      navigate('profile');
+    }
+
+    function renderWithdrawView(main) {
+      main.innerHTML = `
+        <div class="flex items-center gap-2.5">
+          <button onclick="navigate('profile')" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white">←</button>
+          <h1 class="font-bold text-lg text-white">Withdraw</h1>
+        </div>
+
+        <div class="rounded-2xl p-4 bg-gradient-to-br from-[#2A150B] to-[#141722] border border-orange-500/30 space-y-1.5">
+          <div class="text-[10px] text-slate-400 tracking-widest uppercase">WINNING BALANCE</div>
+          <div class="font-orbitron font-black text-2xl text-orange-400">৳${state.user.winningBalance} <span class="text-xs text-slate-300">BDT</span></div>
+          <p class="text-xs font-bangla text-slate-300">(Withdraw শুধু Winning Balance থেকে করা যাবে। Deposit balance withdraw করা যাবে না।)</p>
+        </div>
+
+        <div class="card-surface rounded-2xl p-4 space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">WITHDRAW METHOD</label>
+            <select id="wdMethod" class="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C23] border border-orange-500/35 text-sm font-bold text-white outline-none">
+              <option value="bKash">bKash Personal</option>
+              <option value="Nagad">Nagad Personal</option>
+              <option value="Rocket">Rocket Personal</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">ACCOUNT NUMBER</label>
+            <input id="wdNumber" type="tel" placeholder="01XXXXXXXXX" class="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C23] border border-white/10 text-sm text-white outline-none" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">AMOUNT (MIN ৳110 — MAX ৳1,000)</label>
+            <input id="wdAmount" type="number" min="110" max="1000" placeholder="Enter amount" class="w-full px-3.5 py-2.5 rounded-xl bg-[#1C1C23] border border-white/10 text-sm text-white outline-none" />
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#1B1B22] border border-white/5 font-bangla text-xs text-slate-300 space-y-1">
+            <div class="font-bold text-orange-400">NOTE:</div>
+            <p>• যত টাকাই withdraw দিন, ফি হিসেবে ৳10 কাটা হবে!</p>
+            <p>• দিনে একবারের বেশি withdraw দিতে পারবেন না!</p>
+            <p>• সর্বনিম্ন withdraw ৳110 Tk, সর্বোচ্চ withdraw ৳1,000 Tk.</p>
+          </div>
+
+          <button onclick="submitWithdraw()" class="w-full py-3 rounded-xl fire-btn font-orbitron font-bold text-xs text-white uppercase">
+            REQUEST WITHDRAWAL
+          </button>
+        </div>
+      `;
+    }
+
+    function submitWithdraw() {
+      const method = document.getElementById('wdMethod').value;
+      const num = document.getElementById('wdNumber').value.trim();
+      const amount = Number(document.getElementById('wdAmount').value || 0);
+      if (amount < 110 || amount > 1000) {
+        showToast('Withdraw amount must be between ৳110 and ৳1,000.');
+        return;
+      }
+      if (state.user.winningBalance < amount) {
+        showToast('Insufficient Winning Balance!');
+        return;
+      }
+      if (num.length < 11) {
+        showToast('Enter a valid 11-digit mobile wallet number.');
+        return;
+      }
+      state.user.winningBalance -= amount;
+      state.transactions.unshift({
+        id: 'WD' + Math.floor(100 + Math.random() * 900),
+        type: 'Withdraw',
+        method,
+        trxId: num,
+        amount: -amount,
+        status: 'Pending',
+        time: 'Just now'
+      });
+      syncHeader();
+      showToast('Withdrawal request submitted! Fee ৳10 applied.');
+      navigate('profile');
+    }
+
+    // ==================== ADMIN DASHBOARD ====================
+    function renderAdminView(main) {
+      const pendingTx = state.transactions.filter(t => t.status === 'Pending');
+      main.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="font-orbitron font-black text-base fire-gradient-text">ADMIN COMMAND CENTER</h1>
+            <p class="text-xs text-slate-400">Full Platform & Match Control</p>
+          </div>
+          <button onclick="toggleAdminMode()" class="px-3 py-1.5 rounded-xl bg-white/10 text-xs font-bold text-white">Exit Admin</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="card-surface rounded-xl p-2.5 text-center">
+            <div class="text-[10px] text-slate-400">MATCHES</div>
+            <div class="font-orbitron font-bold text-base text-orange-400">${state.tournaments.length}</div>
+          </div>
+          <div class="card-surface rounded-xl p-2.5 text-center">
+            <div class="text-[10px] text-slate-400">PENDING TX</div>
+            <div class="font-orbitron font-bold text-base text-amber-400">${pendingTx.length}</div>
+          </div>
+          <div class="card-surface rounded-xl p-2.5 text-center">
+            <div class="text-[10px] text-slate-400">PLAYERS</div>
+            <div class="font-orbitron font-bold text-base text-emerald-400">${state.playersDirectory.length + 1}</div>
+          </div>
+        </div>
+
+        <!-- PENDING DEPOSITS & WITHDRAWALS -->
+        <div class="card-surface rounded-2xl p-3.5 border border-orange-500/25 space-y-2.5">
+          <h2 class="font-orbitron font-bold text-xs text-orange-400 uppercase">Payment Verification Queue</h2>
+          ${pendingTx.length === 0 ? `<p class="text-xs text-slate-400">No pending deposits or withdrawals.</p>` : pendingTx.map(tx => `
+            <div class="p-2.5 rounded-xl bg-[#1B1B22] flex items-center justify-between gap-2">
+              <div>
+                <div class="text-xs font-bold text-white">${tx.type} • ${tx.method} (৳${Math.abs(tx.amount)})</div>
+                <div class="text-[11px] text-amber-400">Ref: ${tx.trxId}</div>
+              </div>
+              <div class="flex gap-1.5">
+                <button onclick="adminApproveTx('${tx.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold">Approve</button>
+                <button onclick="adminRejectTx('${tx.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white text-[11px] font-bold">Reject</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- UPDATE ROOM ID & PASSWORD -->
+        <div class="card-surface rounded-2xl p-3.5 border border-white/10 space-y-2.5">
+          <h2 class="font-orbitron font-bold text-xs text-white uppercase">Match Room ID & Password Control</h2>
+          ${state.tournaments.map(m => `
+            <div class="p-2.5 rounded-xl bg-[#1B1B22] space-y-2">
+              <div class="flex justify-between text-xs font-bold text-white">
+                <span>${m.title}</span>
+                <span class="text-orange-400">${m.joinedSlots}/${m.totalSlots}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <input id="admId_${m.id}" value="${m.roomId}" placeholder="Room ID" class="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white" />
+                <input id="admPass_${m.id}" value="${m.roomPass}" placeholder="Password" class="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs text-white" />
+              </div>
+              <button onclick="adminSaveRoom('${m.id}')" class="w-full py-1.5 rounded-lg fire-btn text-[11px] font-bold text-white">Save & Notify Players</button>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- YOUTUBE BANNER MANAGER -->
+        <div class="card-surface rounded-2xl p-3.5 border border-white/10 space-y-2.5">
+          <h2 class="font-orbitron font-bold text-xs text-white uppercase">Add YouTube Banner Link</h2>
+          <input id="admYtUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3 py-2 rounded-xl bg-[#1B1B22] border border-white/10 text-xs text-white" />
+          <input id="admYtTitle" type="text" placeholder="Banner Caption (Bangla or English)" class="w-full px-3 py-2 rounded-xl bg-[#1B1B22] border border-white/10 text-xs text-white" />
+          <button onclick="adminAddYtBanner()" class="w-full py-2 rounded-xl fire-btn text-xs font-bold text-white">Add Banner to Home Slider</button>
+        </div>
+      `;
+    }
+
+    function adminApproveTx(id) {
+      const tx = state.transactions.find(t => t.id === id);
+      if (!tx) return;
+      tx.status = 'Approved';
+      if (tx.type === 'Deposit') {
+        state.user.depositBalance += tx.amount;
+      }
+      syncHeader();
+      showToast(`Transaction ${id} Approved!`);
+      renderAdminView(document.getElementById('mainContainer'));
+    }
+
+    function adminRejectTx(id) {
+      const tx = state.transactions.find(t => t.id === id);
+      if (!tx) return;
+      tx.status = 'Rejected';
+      if (tx.type === 'Withdraw') {
+        state.user.winningBalance += Math.abs(tx.amount);
+      }
+      syncHeader();
+      showToast(`Transaction ${id} Rejected.`);
+      renderAdminView(document.getElementById('mainContainer'));
+    }
+
+    function adminSaveRoom(matchId) {
+      const m = state.tournaments.find(t => t.id === matchId);
+      if (!m) return;
+      m.roomId = document.getElementById(`admId_${matchId}`).value;
+      m.roomPass = document.getElementById(`admPass_${matchId}`).value;
+      state.notifications.unshift({
+        id: 'n' + Date.now(),
+        title: `Room Credentials Updated: ${m.title}`,
+        body: `Room ID: ${m.roomId} | Password: ${m.roomPass}`,
+        time: 'Just now'
+      });
+      showToast('Room ID & Password updated!');
+    }
+
+    function adminAddYtBanner() {
+      const url = document.getElementById('admYtUrl').value.trim();
+      const label = document.getElementById('admYtTitle').value.trim() || 'LEGENDS OF FIRE OFFICIAL VIDEO';
+      if (!url) { showToast('Enter a YouTube URL'); return; }
+      const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      const thumb = match ? `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg` : 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80';
+      state.banners.unshift({
+        id: 'b' + Date.now(),
+        thumb,
+        fallbackBg: 'linear-gradient(135deg, #EA580C 0%, #111827 100%)',
+        ytUrl: url,
+        label
+      });
+      showToast('YouTube Thumbnail Banner added to Home!');
+      toggleAdminMode();
+    }
+
+    // ==================== MODALS ====================
+    function openModal(type) {
+      const backdrop = document.getElementById('modalBackdrop');
+      const card = document.getElementById('modalCard');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+
+      if (type === 'modalNotifications') {
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-orbitron font-bold text-sm text-orange-400">NOTIFICATIONS</h3>
+            <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+          </div>
+          <div class="space-y-2.5">
+            ${state.notifications.map(n => `
+              <div class="p-3 rounded-xl bg-[#1D1D24] border border-white/10">
+                <div class="flex justify-between text-xs font-bold text-white"><span>${n.title}</span><span class="text-[10px] text-slate-400">${n.time}</span></div>
+                <p class="text-xs text-slate-300 mt-1">${n.body}</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (type === 'modalLeaderboard') {
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-orbitron font-bold text-sm text-amber-400">TOP FRAGGERS LEADERBOARD</h3>
+            <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+          </div>
+          <div class="space-y-2">
+            ${[
+              { rank: '#1', name: 'LGFㅤRAFI', kills: 312, won: '৳4,250' },
+              { rank: '#2', name: 'NOVAㅤSAJID', kills: 284, won: '৳3,600' },
+              { rank: '#3', name: state.user.name, kills: state.user.totalKills, won: '৳2,490' }
+            ].map(r => `
+              <div class="p-3 rounded-xl bg-[#1D1D24] flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <span class="font-orbitron font-black text-xs text-amber-400">${r.rank}</span>
+                  <span class="font-bold text-sm text-white">${r.name}</span>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-bold text-emerald-400">${r.won}</div>
+                  <div class="text-[10px] text-slate-400">${r.kills} Kills</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (type === 'modalSupport') {
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-orbitron font-bold text-sm text-orange-400">24/7 LIVE SUPPORT</h3>
+            <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+          </div>
+          <p class="text-xs font-bangla text-slate-300 mb-3">যেকোনো ডিপোজিট, উইথড্র বা রুম আইডি সমস্যার জন্য আমাদের অফিশিয়াল টেলিগ্রাম বা হোয়াটসঅ্যাপে যোগাযোগ করুন।</p>
+          <div class="space-y-2">
+            <a href="https://t.me" target="_blank" class="block w-full py-2.5 rounded-xl bg-sky-600 text-center font-bold text-xs text-white">✈️ Join Official Telegram Channel</a>
+            <a href="https://wa.me/8801700000000" target="_blank" class="block w-full py-2.5 rounded-xl bg-emerald-600 text-center font-bold text-xs text-white">💬 WhatsApp Admin Helpdesk</a>
+          </div>
+        `;
+      } else if (type === 'modalTransactions') {
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-orbitron font-bold text-sm text-white">TRANSACTION HISTORY</h3>
+            <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+          </div>
+          <div class="space-y-2">
+            ${state.transactions.map(t => `
+              <div class="p-3 rounded-xl bg-[#1D1D24] flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-bold text-white">${t.type} • ${t.method}</div>
+                  <div class="text-[10px] text-slate-400">${t.trxId} • ${t.time}</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-orbitron font-bold text-xs ${t.amount >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${t.amount >= 0 ? '+' : ''}৳${t.amount}</div>
+                  <span class="text-[10px] ${t.status === 'Pending' ? 'text-amber-400' : 'text-slate-400'}">${t.status}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    function openJoinModal(matchId) {
+      const m = state.tournaments.find(t => t.id === matchId);
+      if (!m) return;
+      const backdrop = document.getElementById('modalBackdrop');
+      const card = document.getElementById('modalCard');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      card.innerHTML = `
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-orbitron font-bold text-sm text-orange-400">JOIN TOURNAMENT</h3>
+          <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+        </div>
+        <div class="p-3 rounded-xl bg-[#1D1D24] mb-3 text-xs space-y-1">
+          <div class="font-bold text-white">${m.title}</div>
+          <div class="text-slate-400">Entry Fee: <span class="text-rose-400 font-bold">৳${m.entryFee}</span> • Mode: ${m.mode}</div>
+        </div>
+        <form onsubmit="confirmJoinMatch(event, '${m.id}')" class="space-y-2.5">
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">In-Game Name (IGN)</label>
+            <input required value="${state.user.name}" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Free Fire UID</label>
+            <input required value="${state.user.uid}" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-xs text-white" />
+          </div>
+          ${m.mode.includes('DUO') || m.mode.includes('SQUAD') ? `
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1">Teammate IGN / Squad Name</label>
+              <input required placeholder="Enter teammate name" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-xs text-white" />
+            </div>
+          ` : ''}
+          <button type="submit" class="w-full py-2.5 rounded-xl fire-btn font-orbitron font-bold text-xs text-white">PAY ৳${m.entryFee} & CONFIRM SLOT</button>
+        </form>
+      `;
+    }
+
+    function confirmJoinMatch(e, matchId) {
+      e.preventDefault();
+      const m = state.tournaments.find(t => t.id === matchId);
+      if (!m || m.registered) return;
+      const total = state.user.depositBalance + state.user.winningBalance;
+      if (total < m.entryFee) {
+        closeAllModals();
+        showToast('Insufficient balance! Add money to join.');
+        navigate('add-money');
+        return;
+      }
+      if (state.user.depositBalance >= m.entryFee) state.user.depositBalance -= m.entryFee;
+      else {
+        const rem = m.entryFee - state.user.depositBalance;
+        state.user.depositBalance = 0;
+        state.user.winningBalance -= rem;
+      }
+      m.registered = true;
+      m.joinedSlots += 1;
+      state.transactions.unshift({
+        id: 'TX' + Math.floor(100 + Math.random() * 900),
+        type: 'Match Entry',
+        method: 'Wallet',
+        trxId: m.title.slice(0, 12),
+        amount: -m.entryFee,
+        status: 'Completed',
+        time: 'Just now'
+      });
+      syncHeader();
+      closeAllModals();
+      showToast('Slot Confirmed! Room ID unlocked.');
+      navigate('matches');
+    }
+
+    function openRoomModal(matchId) {
+      const m = state.tournaments.find(t => t.id === matchId);
+      if (!m) return;
+      const backdrop = document.getElementById('modalBackdrop');
+      const card = document.getElementById('modalCard');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      card.innerHTML = `
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-orbitron font-bold text-sm text-orange-400">CUSTOM ROOM DETAILS</h3>
+          <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+        </div>
+        ${m.registered ? `
+          <div class="space-y-3">
+            <div class="p-3 rounded-xl bg-[#1D1D24] border border-emerald-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-[10px] text-slate-400">ROOM ID</div>
+                <div class="font-orbitron font-bold text-base text-white">${m.roomId}</div>
+              </div>
+              <button onclick="navigator.clipboard?.writeText('${m.roomId}'); showToast('Room ID copied!')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-xs font-bold text-white">Copy</button>
+            </div>
+            <div class="p-3 rounded-xl bg-[#1D1D24] border border-emerald-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-[10px] text-slate-400">PASSWORD</div>
+                <div class="font-orbitron font-bold text-base text-amber-400">${m.roomPass}</div>
+              </div>
+              <button onclick="navigator.clipboard?.writeText('${m.roomPass}'); showToast('Password copied!')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-xs font-bold text-white">Copy</button>
+            </div>
+          </div>
+        ` : `
+          <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-center space-y-2.5">
+            <p class="text-xs text-rose-300 font-semibold">🔒 Room ID & Password are protected by RLS and visible only to registered players.</p>
+            <button onclick="openJoinModal('${m.id}')" class="px-4 py-2 rounded-xl fire-btn font-orbitron text-xs font-bold text-white">JOIN MATCH TO UNLOCK</button>
+          </div>
+        `}
+      `;
+    }
+
+    function openPrizeModal(matchId) {
+      const m = state.tournaments.find(t => t.id === matchId);
+      if (!m) return;
+      const backdrop = document.getElementById('modalBackdrop');
+      const card = document.getElementById('modalCard');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      card.innerHTML = `
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-orbitron font-bold text-sm text-amber-400">PRIZE BREAKDOWN</h3>
+          <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div class="p-3 rounded-xl bg-[#1D1D24] flex justify-between"><span>🥇 Booyah (#1 Winner)</span><span class="font-bold text-amber-400">৳${Math.round(m.prizePool * 0.5)}</span></div>
+          <div class="p-3 rounded-xl bg-[#1D1D24] flex justify-between"><span>🥈 Runner Up (#2)</span><span class="font-bold text-slate-200">৳${Math.round(m.prizePool * 0.3)}</span></div>
+          <div class="p-3 rounded-xl bg-[#1D1D24] flex justify-between"><span>🥉 3rd Place (#3)</span><span class="font-bold text-orange-400">৳${Math.round(m.prizePool * 0.2)}</span></div>
+          <div class="p-3 rounded-xl bg-[#1D1D24] flex justify-between"><span>🎯 Per Kill Reward</span><span class="font-bold text-emerald-400">৳${m.perKill} / Kill</span></div>
+        </div>
+      `;
+    }
+
+    function openEditProfileModal() {
+      const backdrop = document.getElementById('modalBackdrop');
+      const card = document.getElementById('modalCard');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      card.innerHTML = `
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-orbitron font-bold text-sm text-orange-400">EDIT ESPORTS PROFILE</h3>
+          <button onclick="closeAllModals()" class="text-slate-400 text-lg">✕</button>
+        </div>
+        <form onsubmit="saveProfileEdits(event)" class="space-y-2.5 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Display Name / IGN</label>
+            <input id="editName" required value="${state.user.name}" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Free Fire Numeric UID</label>
+            <input id="editUid" required value="${state.user.uid}" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Primary Squad Role</label>
+            <select id="editRole" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-white">
+              ${['Rusher', 'Sniper', 'Supporter', 'IGL', 'Nader', 'All-Rounder'].map(r => `<option value="${r}" ${state.user.role === r ? 'selected' : ''}>${r}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">WhatsApp Number</label>
+            <input id="editWa" required value="${state.user.whatsapp}" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-white" />
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Hire Rate (e.g. ৳50 / Match)</label>
+            <input id="editRate" required value="${state.user.hireRate}" class="w-full px-3 py-2 rounded-xl bg-[#0E0E12] border border-white/10 text-white" />
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl fire-btn font-orbitron font-bold text-white">SAVE CHANGES</button>
+        </form>
+      `;
+    }
+
+    function saveProfileEdits(e) {
+      e.preventDefault();
+      state.user.name = document.getElementById('editName').value.trim();
+      state.user.uid = document.getElementById('editUid').value.trim();
+      state.user.role = document.getElementById('editRole').value;
+      state.user.whatsapp = document.getElementById('editWa').value.trim();
+      state.user.hireRate = document.getElementById('editRate').value.trim();
+      closeAllModals();
+      showToast('Profile & Roster Card updated!');
+      renderProfileView(document.getElementById('mainContainer'));
+    }
+
+    function closeAllModals() {
+      const backdrop = document.getElementById('modalBackdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    // ==================== BOOT ====================
+    setInterval(() => {
+      if (state.currentView === 'home' && !state.isAdminMode && state.isAuthenticated) {
+        state.bannerIndex = (state.bannerIndex + 1) % state.banners.length;
+        renderHomeView(document.getElementById('mainContainer'));
+      }
+    }, 5000);
+
+    syncHeader();
+    navigate('home');
+  </script>
+</body>
+</html>
